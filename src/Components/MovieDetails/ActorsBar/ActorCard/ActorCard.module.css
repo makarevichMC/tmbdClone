@@ -1,0 +1,25 @@
+.content{
+    border-radius: 10px;
+    border: solid 1px rgb(227, 227, 227);
+    overflow: hidden;
+    height: 100%;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px;
+}
+
+.content span {
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    color: black;
+    cursor: pointer;
+}
+.content span:hover{
+    color: #bfc1be;
+}
+.content p,.content span{
+    margin-left: 10px;
+    margin-top: 10px;
+}
+.content p {
+    margin-bottom: 10px;
+}

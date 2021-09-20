@@ -1,0 +1,46 @@
+.card_wrapper {
+    width: 150px;
+    height: 100%;
+    position: relative;
+}
+.more_btn{
+    position: absolute;
+    right:20px;
+    top:20px;
+}
+.card_img {
+    width: 150px;
+    height: 225px;
+    border-radius: 10px;
+    border: black 1px;
+}
+
+.popularity {
+    position: absolute;
+    top: 208px;
+    left: 15px;
+}
+
+.highlighted_title, .title {
+    margin-top: 20px;
+    margin-left: 15px;
+}
+
+.title a, .highlighted_title a {
+    font-family: "Source Sans Pro", Arial, sans-serif;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.highlighted_title a {
+    color: #01b4e4;
+    transition: color 0.3s;
+}
+
+.date {
+    color: rgba(0, 0, 0, 0.6);
+    font-family: "Source Sans Pro", Arial, sans-serif;
+    margin-left: 15px;
+}

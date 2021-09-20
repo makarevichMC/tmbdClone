@@ -1,0 +1,5 @@
+.item:hover{
+    background-color: rgba(0,0,0,0.05);
+    border-radius: 10px;
+    transition: all 0.3s;
+}

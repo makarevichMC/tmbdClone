@@ -1,0 +1,11 @@
+.highlighted_btn svg, .btn svg{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+}
+.highlighted_btn svg{
+    fill: #01b4e4;
+}
+.btn svg{
+   fill: rgba(183, 175, 175, 0.5);
+}

@@ -1,0 +1,31 @@
+.wrapper{
+    display: flex;
+    border-radius: 30px;
+    border: 2px solid rgba(13,37,63,1);
+    width:max-content ;
+    position: relative;
+}
+
+.item{
+    padding: 7px 15px 7px 15px;
+    color:rgb(3, 37, 65);
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.4s;
+}
+
+.item.active{
+    background: -webkit-linear-gradient(45deg, #d2f5c8, #016b12);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.slider{
+    background-color:#0d253f;
+    border-radius: 20px;
+    transition: all 0.2s;
+    position: absolute;
+    height: 100%;
+    width: 0px;
+    z-index: -1;
+}

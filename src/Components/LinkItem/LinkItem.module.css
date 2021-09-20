@@ -1,0 +1,40 @@
+.main,.dropdown{
+    position: relative;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    background-color: burlywood;
+
+}
+.main a{
+    color:white;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.dropdown a{
+    display: inline-block;
+    color:rgba(0,0,0,0.6);
+    font-size: 14px;
+    font-weight: 400;
+    margin:5px 0 5px;
+    text-decoration: none;
+}
+.dropdown:hover{
+    background-color: #0d253f;
+    transition: background-color 0.4s;
+}
+.dropdown:hover a{
+    color: white;
+    font-weight: 600;
+}
+.dropdown{
+    padding:10px 30px 10px 10px;
+}
+.children{
+    position: absolute;
+
+}

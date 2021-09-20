@@ -1,0 +1,21 @@
+header{
+    height: 60px;
+    background-color:#0d253f;
+    width: 100vw;
+    margin-bottom: 40px;
+}
+.content{
+    height: 100%;
+    width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+.logo{
+    width:160px;
+}
+.login{
+    margin-left:200px;
+}
+
+

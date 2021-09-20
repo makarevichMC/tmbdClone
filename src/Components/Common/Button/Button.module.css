@@ -1,0 +1,15 @@
+.btn{
+    transition: background-color 0.5s;
+    padding: 6px 19px 6px 19px;
+    color:white;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #01b4e4;
+    border-radius: 5px;
+    border-style: none;
+}
+
+.active{
+    background-color:  #0d253f;
+    cursor: pointer;
+}

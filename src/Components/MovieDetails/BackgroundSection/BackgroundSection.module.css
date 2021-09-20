@@ -1,0 +1,140 @@
+.wrapper {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+}
+
+.background {
+    position: absolute;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+}
+
+.content_wrapper {
+    padding: 30px 0 30px;
+    position: relative;
+    width: 1400px;
+    margin: 0 auto;
+    z-index: 11;
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    color: white;
+}
+
+.image>img{
+    border-radius: 20px;
+}
+
+.percentage_and_buttons {
+    margin-top: 20px;
+    display: flex;
+    position: absolute;
+}
+.percentage_and_buttons>span {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    margin-left: 20px;
+}
+.percentage{
+
+}
+.percentage:hover {
+    transform: scale(1.1);
+    transition: all 0.2s;
+}
+
+.buttons {
+    display: flex;
+    margin-left: 30px;
+}
+
+
+.content {
+    font-family: "Source Sans Pro", Arial, sans-serif;
+}
+
+.content ul {
+    display: flex;
+}
+
+.content li:first-child {
+    list-style: none;
+}
+
+.content li {
+    margin-right: 30px;
+}
+
+
+.content h1 {
+    font-family: "Source Sans Pro", Arial, sans-serif;
+    font-size: 35px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.content h1:hover, .genre_item:hover {
+    color: rgba(191, 193, 190, 0.85);
+    transition: color 0.2s;
+    cursor: pointer;
+}
+
+
+.genre_item {
+    margin-right: 10px;
+}
+
+.genre_item:not(:last-child)::after {
+    content: ',';
+}
+
+.genre_item::after {
+    color: white;
+}
+
+.content h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 20px 0 10px;
+}
+
+.tagline {
+    display: block;
+    margin-top: 100px;
+    font-style: italic;
+    color: rgba(191, 193, 190, 0.7);
+    font-weight: 700;
+}
+
+.overview {
+    margin: 20px 0 20px;
+    line-height: 1.5;
+}
+
+.creators {
+    display: flex;
+    font-size: 12px;
+}
+
+.creators_item {
+    display: block;
+    margin-right: 150px;
+}
+
+.creators_item span {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.creators_item span:hover {
+    color: rgba(191, 193, 190, 0.7);
+    transition: color 0.2s;
+    cursor: pointer;
+}
