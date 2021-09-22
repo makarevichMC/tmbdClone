@@ -5,19 +5,19 @@ import styles from './PhotoAndInfo.module.css';
 
 
 type PhotoAndInfoProps = {
-    knownFor:string
-    birthday: string
-    gender:string
-    place_of_birth:string
+    knownFor?:string
+    birthday?: string | null
+    gender?:string
+    place_of_birth?:string|null
     projectsCount:number
-    url:string
+    url?:string
 }
 
 const PhotoAndInfo:FC<PhotoAndInfoProps> = ({knownFor,birthday,place_of_birth,gender,projectsCount,url}) => {
     return (
         <div className={styles.image_and_info}>
-            <div className={styles.image}>
-                    <img src={url} alt=""/>
+            <div className={styles.image_wrapper}>
+                    <img className={styles.image}  src={url} alt=""/>
             </div>
             <div className={styles.info}>
                 <h4>Персональная информация</h4>

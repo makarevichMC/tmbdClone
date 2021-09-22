@@ -1,5 +1,8 @@
 //GENERAL TYPES
 
+const TV = 'TV';
+const MOVIE = 'MOVIE';
+
 export interface Action {
     type: string
     payload?: any
@@ -489,14 +492,14 @@ export type personDetails = {
     place_of_birth: string|null
     profile_path: string|null
 }
-type movieAndTVCredits = {
+export type movieAndTVCredits = {
     id:number
     original_language:string
     episode_count:number
     overview:string
     genre_ids:number[]
     name:string
-    media_type:string
+    media_type:typeof TV | typeof MOVIE
     poster_path:string | null
     first_air_date:string
     vote_average:number
@@ -511,7 +514,8 @@ type movieAndTVCredits = {
     title:string
 
 }
-type crewCredits = {
+export type crewCredits = {
+    id:number
     department:string
     original_language:string
     episode_count:number
@@ -521,7 +525,7 @@ type crewCredits = {
     original_name:string
     vote_count:number
     name:string
-    media_type:string
+    media_type:typeof TV | typeof MOVIE
     popularity:number
     credit_id:string
     backdrop_path:string | null
@@ -539,3 +543,14 @@ export type personCredits = {
     crew:crewCredits[]
 }
 
+//PERSOM PAGE
+export type CreditsData = {
+    id:number
+    title:string
+    job?:string
+    department:string
+    character?:string
+    date:string
+    episodeCount?:number
+    media_type: typeof TV | typeof MOVIE
+}

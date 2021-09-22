@@ -6,16 +6,22 @@ import {personPageAPI} from "../../API/api";
 export interface personPageState {
     personDetails:personDetails|null
     personCredits:personCredits|null
+    isLoading:boolean
 }
 
 const initialState: personPageState = {
     personDetails:null,
-    personCredits:null
+    personCredits:null,
+    isLoading:false
 }
 
 export enum personPageActions {
     SET_PERSON_DETAILS = 'SET_PERSON_DETAILS',
     SET_PERSON_CREDITS = 'SET_PERSON_CREDITS',
+    TOGGLE_LOADING = 'TOGGLE_LOADING'
+}
+export type toggleLoadingAction = {
+    type:personPageActions.TOGGLE_LOADING
 }
 
 export type setPersonDetailsAction = {
@@ -31,6 +37,7 @@ export type setPersonCreditsAction = {
         credits:personCredits
     }
 }
+const toggleLoadingAC = ():toggleLoadingAction => ({type:personPageActions.TOGGLE_LOADING})
 
 const setPersonDetailsAC = (details:personDetails):setPersonDetailsAction=>({
     type:personPageActions.SET_PERSON_DETAILS,
@@ -46,16 +53,22 @@ const setPersonCreditsAC = (credits:personCredits):setPersonCreditsAction=>({
     }
 })
 
-type personPageAction = setPersonDetailsAction | setPersonCreditsAction
+type personPageAction = setPersonDetailsAction | setPersonCreditsAction | toggleLoadingAction
 
 export const personPageReducer = (state=initialState,action:personPageAction) => {
     switch (action.type) {
-        case personPageActions.SET_PERSON_DETAILS:
-            if (deepEqual(state.personDetails,action.payload.details)) return
-            return {...state,personDetails:action.payload.details}
         case personPageActions.SET_PERSON_CREDITS:
-            if (deepEqual(state.personDetails,action.payload.credits)) return
-            return {...state,personCredits:action.payload.credits}
+            if (!deepEqual(action.payload.credits,state.personCredits)){
+                return {...state,personCredits:action.payload.credits}
+            }
+            return {...state}
+        case personPageActions.SET_PERSON_DETAILS:
+            if (!deepEqual(state.personDetails,action.payload.details)) {
+                return {...state, personDetails: action.payload.details}
+            }
+            return {...state}
+        case personPageActions.TOGGLE_LOADING:
+            return {...state,isLoading:!state.isLoading}
     }
     return state
 }
@@ -64,10 +77,13 @@ export const setPersonPageThunk = (id:string) => async (dispatch:Dispatch<Action
 
     const innerId = Number(id);
 
+    dispatch(toggleLoadingAC());
+
     const details =  await personPageAPI.getPersonInfo(innerId);
     const credits = await personPageAPI.getPersonCredits(innerId);
 
     dispatch(setPersonDetailsAC(details));
     dispatch(setPersonCreditsAC(credits));
 
+    dispatch(toggleLoadingAC());
 }

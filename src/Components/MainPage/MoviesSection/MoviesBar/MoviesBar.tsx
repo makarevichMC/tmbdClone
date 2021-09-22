@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
-import {MovieBarData, MovieDetails, TVDetails} from "../../../../Types/Types";
-import SmallMovieCard from "./SmallMovieCard/SmallMovieCard";
+import {MovieBarData, MovieDetails, TVDetails} from '../../../../Types/Types';
+import SmallMovieCard from './SmallMovieCard/SmallMovieCard';
 import styles from './MoviesBar.module.css';
 
 interface MovieContainerProps {

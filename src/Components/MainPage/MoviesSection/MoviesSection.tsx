@@ -1,9 +1,9 @@
 import React, {FC, useEffect, useState} from 'react';
 //@ts-ignore
 import styles from './MoviesSection.module.css';
-import MoviesBar from "./MoviesBar/MoviesBar";
-import {MovieBarData, MovieDetails, TVDetails} from "../../../Types/Types";
-import SwitchBar from "./SwitchBar/SwitchBar";
+import MoviesBar from './MoviesBar/MoviesBar';
+import {MovieBarData, MovieDetails, TVDetails} from '../../../Types/Types';
+import SwitchBar from './SwitchBar/SwitchBar';
 
 
 
