@@ -34,8 +34,8 @@ export const getConfigurationAPI = async ():Promise<APIConfig> => {
         let response = await axiosInstance.get<APIConfig>(`https://api.themoviedb.org/3/configuration?api_key=${APIkey}`);
         return response.data;
     }
-    catch (e) {
-        return e.response.data;
+    catch (e:any) {
+            return e.response.data;
     }
 }
 
@@ -44,7 +44,7 @@ export const query = async () => {
         let response = await axiosInstance.get(`https://api.themoviedb.org/3/search/movie?api_key=${APIkey}&query=Сус`);
         return response.data;
     }
-    catch (e) {
+    catch (e:any) {
         return e.response.data;
     }
 }
@@ -57,7 +57,7 @@ export const AuthorizationAPI = {
         try {
             let response = await axiosInstance.get<IToken>(`authentication/token/new?api_key=${APIkey}`);
             return response.data;
-        } catch (e) {
+        } catch (e:any) {
             return e.response.data;
         }
 
@@ -70,7 +70,7 @@ export const AuthorizationAPI = {
                 request_token
             })
             return response.data;
-        } catch (e) {
+        } catch (e:any) {
             return e.response.data;
         }
 
@@ -80,7 +80,7 @@ export const AuthorizationAPI = {
             let response = await axiosInstance.post<ISessionRequest>(`authentication/session/new?api_key=${APIkey}`, {request_token})
             console.log(response)
             return response.data
-        } catch (e) {
+        } catch (e:any) {
             return e.response.data
         }
     },
@@ -90,7 +90,7 @@ export const AuthorizationAPI = {
             console.log(response.data)
             return response.data
         }
-        catch (e) {
+        catch (e:any) {
             return e.response.data
         }
     }

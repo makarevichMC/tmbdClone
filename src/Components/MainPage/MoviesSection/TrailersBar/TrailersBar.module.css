@@ -1,6 +1,6 @@
 .trailers_wrapper{
     display: flex;
-    width: 1400px;
+    width: 100%;
     overflow: scroll;
     overflow-y:hidden;
     height: 330px;
@@ -8,7 +8,6 @@
 }
 .trailer_item{
     margin-left: 20px;
-
 }
 
 .trailers_wrapper::-webkit-scrollbar{

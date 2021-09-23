@@ -1,6 +1,6 @@
 .cards_wrapper {
     display: flex;
-    width: 1200px;
+    width: 100%;
     overflow: scroll;
     overflow-y: hidden;
     height: auto;

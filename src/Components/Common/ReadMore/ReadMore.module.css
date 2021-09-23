@@ -1,0 +1,19 @@
+.wrapper{
+
+}
+.text{
+    display: inline-block;
+    position: relative;
+}
+.text:after {
+}
+
+.text_toggle{
+    text-decoration: none;
+    cursor: pointer;
+    color: #01b4e4;
+    font-weight: 700;
+}
+.text_toggle:hover{
+   color:#90cea1;
+}

@@ -1,9 +1,10 @@
 import React, {FC} from 'react';
 // @ts-ignore
 import styles from './PersonPage.module.css';
-import {personCredits, personDetails} from "../../Types/Types";
-import PhotoAndInfo from "./PhotoAndInfo/PhotoAndInfo";
-import BiographySection from "./BiographySection/BiographySection";
+import {CreditsData, personCredits, personDetails} from '../../Types/Types';
+import PhotoAndInfo from './PhotoAndInfo/PhotoAndInfo';
+import BiographySection from './BiographySection/BiographySection';
+import Credits from './BiographySection/Credits/Credits';
 
 
 type PersonPageProps = {
@@ -29,6 +30,33 @@ const PersonPage: FC<PersonPageProps> = (props) => {
         photoUrl = props.photoBaseUrl + props.personInfo?.profile_path;
     }
 
+    let formatedCredits:CreditsData[]|null = null;
+
+    if (props.personCredits?.cast){
+        const formatedCast:CreditsData[] = props.personCredits?.cast.map(el => ({
+            id:el.id,
+            title:el.title || el.name,
+            department:'acting',
+            character:el.character,
+            episodeCount:el.episode_count,
+            date:el.first_air_date||el.release_date,
+            media_type:el.media_type
+        }))
+        const formaredCrew:CreditsData[] = props.personCredits.crew.map(el=>({
+            id:el.id,
+            title:el.title || el.name,
+            department:el.department,
+            episodeCount:el.episode_count,
+            date:el.first_air_date||el.release_date,
+            media_type:el.media_type
+        }))
+        formatedCredits = formatedCast.concat(formaredCrew).sort((el1,el2)=>{
+            let firstDate = Number(el1.date.slice(0,4));
+            let secondDate = Number(el2.date.slice(0,4));
+            return secondDate - firstDate
+        });
+    }
+
     return (
         props.isLoading ?
             <div>{'LOADING'}</div>
@@ -42,7 +70,9 @@ const PersonPage: FC<PersonPageProps> = (props) => {
                     credits={props.personCredits} baseUrl={props.movieBarBaseUrl}
                     name={props.personInfo?.name} biography={props.personInfo?.biography}/>
 
+                    {formatedCredits && <Credits credits={formatedCredits}/>}
             </div>
+
 
     );
 };
