@@ -4,10 +4,10 @@ import DropdownMenu from "../DropdownMenu/DropdownMenu";
 
 const MovieMenu:FC = () => {
     const data = [
-        {text: 'Популярные', url: '/movie'},
-        {text: 'Смотрят сейчас',url: '/movie/now-playing'},
-        {text: 'Ожидаемые', url: '/movie/upcoming'},
-        {text: 'Лучшие', url: '/movie/top-rated'}];
+        {text: 'Популярные', url: '/movies'},
+        {text: 'Смотрят сейчас',url: '/movies/now-playing'},
+        {text: 'Ожидаемые', url: '/movies/upcoming'},
+        {text: 'Лучшие', url: '/movies/top-rated'}];
 
     return (
         <DropdownMenu data={data}/>

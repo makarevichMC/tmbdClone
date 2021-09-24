@@ -8,6 +8,7 @@ import {query} from "./API/api";
 import MainPageContainer from './Components/MainPage/MainPageContainer';
 import MovieDetailsContainer from './Components/MovieDetails/MovieDetailsContainer';
 import PersonPageContainer from './Components/PersonPage/PersonPageContainer';
+import SortedMoviesPageContainer from "./SortedMoviesPage/SortedMoviesPageContainer";
 
 interface appProps {
     setConfig:()=>{}
@@ -26,9 +27,10 @@ const App:FC<appProps> = ({setConfig}) => {
                 <Route exact path={'/login'} component={()=><LoginFormContainer/>}/>
                 <Route exact path={'/u/:userName?'} component={()=><Profile/>}/>
                 <Route exact path={'/main'} component={()=><MainPageContainer/>}/>
-                <Route exact path={'/movies/:id?'} component={()=><MovieDetailsContainer/>}/>
-                <Route exact path={'/person/:id?'} component={()=><PersonPageContainer/>}/>
-                <Route/>
+                <Route exact path={'/movies/:id'} component={()=><MovieDetailsContainer/>}/>
+                <Route exact path={'/person/:id'} component={()=><PersonPageContainer/>}/>
+                <Route exact path={'/movies'} component={() => <div> movies </div>}/>
+                <Route exact path={'/movies/:option'} component={()=><SortedMoviesPageContainer/>}/>
             </div>
         </BrowserRouter>
     );

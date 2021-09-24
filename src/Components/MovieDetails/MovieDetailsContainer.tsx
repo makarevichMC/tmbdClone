@@ -14,7 +14,10 @@ const MovieDetailsContainer: FC<ReduxProps> = (props) => {
 
     const params = useParams<MoviesDetailsParams>();
     useEffect(()=>{
-        props.setMoviePageThunk(params.id);
+        console.log(Number(params.id))
+        if (!isNaN(Number(params.id))){
+            props.setMoviePageThunk(params.id);
+        }
     },[params.id])
 
     return (

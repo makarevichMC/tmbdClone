@@ -5,13 +5,15 @@ import {APIconfigReducer} from "./reducers/APIconfigReducer";
 import {mainPageReducer} from "./reducers/mainPageReducer";
 import {moviePageReducer} from "./reducers/moviePageReducer";
 import {personPageReducer} from "./reducers/personPageReducer";
+import {sortedMoviesPageReducer} from "./reducers/SortedMoviesPageReducer";
 
 const mainReducer = combineReducers({
     authorization:authReducer,
     config:APIconfigReducer,
     mainPage:mainPageReducer,
     moviePage:moviePageReducer,
-    personPage:personPageReducer
+    personPage:personPageReducer,
+    sortedPage:sortedMoviesPageReducer
 });
 
 const store = createStore(mainReducer,applyMiddleware(thunk));
