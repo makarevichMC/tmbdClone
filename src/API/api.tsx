@@ -198,3 +198,35 @@ export const personPageAPI = {
         return response.data
     }
 }
+
+// MOVIE SORT PAGE API
+
+export const moviesSortAPI = {
+    async getNowPlaying(page:number):Promise<GetMovieList>{
+        const response = await axiosInstance.get<getMovies>(`movie/now_playing?api_key=${APIkey}&language=ru-RU&page=${page}`);
+        return response.data
+    },
+    async getUpcoming(page:number):Promise<GetMovieList>{
+        const response = await axiosInstance.get<getMovies>(`movie/upcoming?api_key=${APIkey}&language=ru-RU&page=${page}`)
+        return response.data
+    },
+    async getTopRated(page:number):Promise<GetMovieList>{
+        const response = await axiosInstance.get<getMovies>(`movie/top_rated?api_key=${APIkey}&language=ru-RU&page=${page}`)
+        return response.data
+    },
+}
+
+export const tvSortAPI = {
+    async getAiringToday(page:number):Promise<GetTVList<TVListObject>>{
+            const response = await axiosInstance.get<getTV>(`tv/airing_today?api_key=${APIkey}&language=ru-RU&page=${page}`);
+            return response.data
+    },
+    async getOnTheAir(page:number):Promise<GetTVList<TVListObject>>{
+        const response = await axiosInstance.get<getTV>(`tv/on_the_air?api_key=${APIkey}&language=ru-RU&page=${page}`)
+        return response.data
+    },
+    async getTopRated(page:number):Promise<GetTVList<TVListObject>>{
+        const response = await axiosInstance.get<getTV>(`tv/top_rated?api_key=${APIkey}&language=ru-RU&page=${page}`)
+        return response.data
+    },
+}

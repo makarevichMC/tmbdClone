@@ -5,6 +5,7 @@ import {CreditsData, personCredits, personDetails} from '../../Types/Types';
 import PhotoAndInfo from './PhotoAndInfo/PhotoAndInfo';
 import BiographySection from './BiographySection/BiographySection';
 import Credits from './BiographySection/Credits/Credits';
+import {log} from "util";
 
 
 type PersonPageProps = {
@@ -42,7 +43,7 @@ const PersonPage: FC<PersonPageProps> = (props) => {
             date:el.first_air_date||el.release_date,
             media_type:el.media_type
         }))
-        const formaredCrew:CreditsData[] = props.personCredits.crew.map(el=>({
+        const formatedCrew:CreditsData[] = props.personCredits.crew.map(el=>({
             id:el.id,
             title:el.title || el.name,
             department:el.department,
@@ -50,7 +51,10 @@ const PersonPage: FC<PersonPageProps> = (props) => {
             date:el.first_air_date||el.release_date,
             media_type:el.media_type
         }))
-        formatedCredits = formatedCast.concat(formaredCrew).sort((el1,el2)=>{
+
+        formatedCredits = formatedCast.concat(formatedCrew)
+            .filter(el=>el.date)
+            .sort((el1,el2)=>{
             let firstDate = Number(el1.date.slice(0,4));
             let secondDate = Number(el2.date.slice(0,4));
             return secondDate - firstDate

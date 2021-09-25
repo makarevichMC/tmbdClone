@@ -1,21 +1,48 @@
-import React, {FC} from 'react';
-import { useParams } from 'react-router-dom';
-import {RootState} from '../redux/store';
+import React, {FC, useEffect} from 'react'
+import {connect, ConnectedProps} from 'react-redux'
+import {useLocation, useParams} from 'react-router-dom'
+import {RootState} from '../redux/store'
+import {initialSorting, setSortedMoviesThunk} from '../redux/reducers/SortedMoviesPageReducer'
+import {mediaType} from '../Types/Types'
+import SortedMoviesPage from './SortedMoviesPage';
 
 type SortedPageParams = {
-    option: string
+    option: initialSorting
 }
 
-const SortedMoviesPageContainer:FC = () => {
-    const params = useParams<SortedPageParams>();
+const SortedMoviesPageContainer: FC<ReduxProps> = (props) => {
 
-    console.log(params.option);
+    const params = useParams<SortedPageParams>()
+    const location = useLocation()
+
+    let mediaType: mediaType
+
+    if (location.pathname.split('/')[1] === 'tv') {
+        mediaType = 'TV'
+    } else mediaType = 'MOVIE'
+
+    useEffect(() => {
+        props.setSortedMoviesThunk(mediaType, params.option)
+    }, [params.option])
+
 
     return (
-        <div>
-            {params.option}
-        </div>
+        <SortedMoviesPage baseUrl={props.baseUrl} data={props.initialData}/>
     );
 };
 
-export default SortedMoviesPageContainer;
+
+const mapStateToProps = (state: RootState) => {
+    console.log('mapStateToProps')
+    return {
+        initialData: state.sortedPage.pageData,
+        lastPage: state.sortedPage.lastPage,
+        baseUrl: state.config.images.base_url + state.config.images.poster_sizes[2]
+    }
+}
+
+const connector = connect(mapStateToProps, {setSortedMoviesThunk})
+
+type ReduxProps = ConnectedProps<typeof connector>
+
+export default connector(SortedMoviesPageContainer)

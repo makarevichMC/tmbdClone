@@ -29,7 +29,7 @@ const SmallMovieCard: FC<smallMovieCard> = ({imageUrl, title, date, rating, id})
                     <img className={styles.card_img} src={imageUrl}/>
                 </NavLink>
                 <div onMouseEnter={highlightToggle} onMouseLeave={highlightToggle} className={titleStyle}>
-                    <NavLink to={'/details'}>
+                    <NavLink to={`/movies/${id}`}>
                         {title}
                     </NavLink>
                 </div>

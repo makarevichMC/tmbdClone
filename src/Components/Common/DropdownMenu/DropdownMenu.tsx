@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import styles from './DropdownMenu.module.css';
-import List from "../../List/List";
-import MenuItem from "./MenuItem/MenuItem";
+import List from '../../List/List';
+import MenuItem from './MenuItem/MenuItem';
 import {useSpring,animated} from 'react-spring';
 
 type MenuData = {
