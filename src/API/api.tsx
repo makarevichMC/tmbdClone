@@ -18,6 +18,7 @@ import {
     TVRecomendations,
     videoResponse
 } from "../Types/Types";
+import {initialSorting, SortingType} from '../redux/reducers/SortedMoviesPageReducer';
 
 
 const APIkey: string = '771d51cfcca51d5e93afff45320fea02';
@@ -201,6 +202,9 @@ export const personPageAPI = {
 
 // MOVIE SORT PAGE API
 
+export type filterType = null | initialSorting | SortingType
+
+
 export const moviesSortAPI = {
     async getNowPlaying(page:number):Promise<GetMovieList>{
         const response = await axiosInstance.get<getMovies>(`movie/now_playing?api_key=${APIkey}&language=ru-RU&page=${page}`);
@@ -214,6 +218,9 @@ export const moviesSortAPI = {
         const response = await axiosInstance.get<getMovies>(`movie/top_rated?api_key=${APIkey}&language=ru-RU&page=${page}`)
         return response.data
     },
+    async getMoviesByFilter(page:number,){
+
+    }
 }
 
 export const tvSortAPI = {

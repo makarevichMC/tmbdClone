@@ -5,7 +5,7 @@ import {CreditsData, personCredits, personDetails} from '../../Types/Types';
 import PhotoAndInfo from './PhotoAndInfo/PhotoAndInfo';
 import BiographySection from './BiographySection/BiographySection';
 import Credits from './BiographySection/Credits/Credits';
-import {log} from "util";
+
 
 
 type PersonPageProps = {

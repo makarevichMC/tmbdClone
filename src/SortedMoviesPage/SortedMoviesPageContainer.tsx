@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react'
 import {connect, ConnectedProps} from 'react-redux'
 import {useLocation, useParams} from 'react-router-dom'
 import {RootState} from '../redux/store'
-import {initialSorting, setSortedMoviesThunk} from '../redux/reducers/SortedMoviesPageReducer'
+import {fetchMoreMoviesThunk, initialSorting, setSortedMoviesThunk} from '../redux/reducers/SortedMoviesPageReducer'
 import {mediaType} from '../Types/Types'
 import SortedMoviesPage from './SortedMoviesPage';
 
@@ -27,21 +27,25 @@ const SortedMoviesPageContainer: FC<ReduxProps> = (props) => {
 
 
     return (
-        <SortedMoviesPage baseUrl={props.baseUrl} data={props.initialData}/>
+        <SortedMoviesPage
+            sortingType={props.sortingType}
+            baseUrl={props.baseUrl} data={props.initialData}
+            fetchMore={props.fetchMoreMoviesThunk} mediaType={mediaType}/>
     );
 };
 
 
 const mapStateToProps = (state: RootState) => {
-    console.log('mapStateToProps')
     return {
         initialData: state.sortedPage.pageData,
         lastPage: state.sortedPage.lastPage,
-        baseUrl: state.config.images.base_url + state.config.images.poster_sizes[2]
+        baseUrl: state.config.images.base_url + state.config.images.poster_sizes[2],
+        currentPage:state.sortedPage.lastPage,
+        sortingType:state.sortedPage.currentSorting
     }
 }
 
-const connector = connect(mapStateToProps, {setSortedMoviesThunk})
+const connector = connect(mapStateToProps, {setSortedMoviesThunk,fetchMoreMoviesThunk})
 
 type ReduxProps = ConnectedProps<typeof connector>
 

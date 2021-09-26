@@ -1,3 +1,5 @@
+import {type} from 'os';
+
 export   const hexToRGB = (hex: Array<string>, alpha: number) => {
 
     if (hex.some(el=>el===undefined)) return
@@ -13,26 +15,40 @@ export   const hexToRGB = (hex: Array<string>, alpha: number) => {
     }
 }
 
-export const deepEqual =  (x:any, y:any) => {
-    if (x === y) {
-        return true;
-    }
-    else if ((typeof x == "object" && x != null) && (typeof y == "object" && y != null)) {
-        if (Object.keys(x).length != Object.keys(y).length)
-            return false;
+// export const deepEqual =  (x:any, y:any) => {
+//     if (x === y) {
+//         return true;
+//     }
+//     else if ((typeof x == "object" && x != null) && (typeof y == "object" && y != null)) {
+//         if (Object.keys(x).length != Object.keys(y).length)
+//             return false;
+//
+//         for (let prop in x) {
+//             if (y.hasOwnProperty(prop))
+//             {
+//                 if (! deepEqual(x[prop], y[prop]))
+//                     return false;
+//             }
+//             else
+//                 return false;
+//         }
+//
+//         return true;
+//     }
+//     else
+//         return false;
+// }
 
-        for (let prop in x) {
-            if (y.hasOwnProperty(prop))
-            {
-                if (! deepEqual(x[prop], y[prop]))
-                    return false;
-            }
-            else
-                return false;
-        }
+export const deepEqual = (x:any,y:any) => {
+    if (x===y)  return true
 
-        return true;
+    if (typeof x !== 'object' || typeof y !== 'object' || x===null||y ===null) return false
+
+    for (let prop in x){
+        if (x[prop]===y[prop]) continue
+        if (typeof x !== 'object' || typeof y !== 'object' || x===null||y ===null) return false
+        else if (deepEqual(x[prop],y[prop])) continue
+        else return false
     }
-    else
-        return false;
+    return true
 }

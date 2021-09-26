@@ -1,7 +1,8 @@
 .card_wrapper {
-    width: 150px;
+    width: 160px;
     height: 100%;
     position: relative;
+    padding-bottom: 5px;
 }
 .more_btn{
     position: absolute;
@@ -9,7 +10,7 @@
     top:20px;
 }
 .card_img {
-    width: 150px;
+    width: 160px;
     height: 225px;
     border-radius: 10px;
     border: black 1px;
@@ -24,6 +25,7 @@
 .highlighted_title, .title {
     margin-top: 20px;
     margin-left: 15px;
+    margin-bottom: 5px;
 }
 
 .title a, .highlighted_title a {
