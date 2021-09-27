@@ -9,7 +9,7 @@ import {
     ILogout,
     ISessionRequest,
     IToken,
-    IUserInfo,
+    IUserInfo, mediaType, MovieBarData,
     MovieDetails,
     MovieRecomendations, personCredits,
     personDetails,
@@ -236,4 +236,39 @@ export const tvSortAPI = {
         const response = await axiosInstance.get<getTV>(`tv/top_rated?api_key=${APIkey}&language=ru-RU&page=${page}`)
         return response.data
     },
+}
+
+export const  getSortedMedia = async (mediaType:mediaType,sortingType:filterType,page:number) =>  {
+    let result
+    if (mediaType === 'MOVIE') {
+        switch (sortingType) {
+            case 'popular':
+                result = await mainPageAPI.getPopularMovies(page)
+                break
+            case 'top-rated':
+                result = await moviesSortAPI.getTopRated(page)
+                break
+            case 'upcoming':
+                result = await moviesSortAPI.getUpcoming(page)
+                break
+            case 'now-playing':
+                result = await moviesSortAPI.getNowPlaying(page)
+                break
+        }
+    } else if (mediaType === 'TV'){
+        switch (sortingType) {
+            case 'popular':
+                result = await mainPageAPI.getPopularTV(page)
+                break
+            case 'top-rated':
+                result = await tvSortAPI.getTopRated(page)
+                break
+            case 'airing-today':
+                result = await tvSortAPI.getAiringToday(page)
+                break
+            case 'on-the-air':
+                result = await tvSortAPI.getOnTheAir(page)
+        }
+        return result
+}
 }

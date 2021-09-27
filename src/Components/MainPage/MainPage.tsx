@@ -41,4 +41,6 @@ const MainPage: FC<MainPageProps> = (props) => {
 );
 };
 
+
+
 export default MainPage;

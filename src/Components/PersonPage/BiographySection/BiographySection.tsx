@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import MoviesBar from "../../MainPage/MoviesSection/MoviesBar/MoviesBar";
+import MoviesBar from '../../MainPage/MoviesSection/MoviesBar/MoviesBar';
 import {MovieBarData, personCredits, crewCredits, movieAndTVCredits, CreditsData} from "../../../Types/Types";
 import styles from './BiographySection.module.css';
 import ReadMore from "../../Common/ReadMore/ReadMore";
