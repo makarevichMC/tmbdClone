@@ -25,8 +25,8 @@ export type sortedMoviesPageState = {
     lastPage: number
     initialSorting: initialSorting | null
     additionalSorting:sortingType| null
-    genreSorting:number[]
-    dateRange:null | dates
+    genreSorting:number[] | null
+    dateRange:dates | null
     pageCount:number|null
 }
 
@@ -100,7 +100,7 @@ const initialState: sortedMoviesPageState = {
     lastPage: 0,
     initialSorting: null,
     additionalSorting:null,
-    genreSorting:[],
+    genreSorting:null,
     dateRange:null,
     pageCount:null
 }
@@ -128,16 +128,13 @@ export const sortedMoviesPageReducer = (state = initialState, action: sortedMovi
             return {...state, lastPage: action.payload.pageNumber}
             break
         case SortedMoviesPageActions.FETCH_NEXT_PAGE:
-            console.log(action.payload) //////////////////////////////////////////// !!!!!!!!!!!!
-            if (state.pageDataResponse.pageData&&action.payload.data.pageData) {
                 return {
                     ...state,
                     pageDataResponse: {
                         ...state.pageDataResponse,
-                        pageData:[...state.pageDataResponse.pageData, ...action.payload.data.pageData]
+                        pageData: [...state.pageDataResponse.pageData, ...action.payload.data.pageData]
                     }
                 }
-            }
             break
     }
     return state
@@ -145,7 +142,6 @@ export const sortedMoviesPageReducer = (state = initialState, action: sortedMovi
 
 export const setSortedMoviesThunk = (type: mediaType, dataType: initialSorting = 'popular') => async (dispatch: Dispatch<Action>) => {
     const result = await sortedPageAPI.getSortedMedia(type,dataType,1)
-    if (result?.results){
         dispatch(setInitialSortingTypeAC(dataType))
         dispatch(setPageNumberAC(1))
         const Data = {
@@ -154,7 +150,6 @@ export const setSortedMoviesThunk = (type: mediaType, dataType: initialSorting =
             totalResults:result.total_results
         }
         dispatch(setSortedMoviesPageAC(Data))
-    }
 }
 
 export const fetchMoreMoviesThunk = (type:mediaType) => async (dispatch: Dispatch<Action>, getState: () => RootState) => {

@@ -26,6 +26,7 @@ import {
 } from '../Types/Types';
 
 import {initialSorting, sortedPageData, sortingType} from '../redux/reducers/SortedMoviesPageReducer';
+import {log} from "util";
 
 
 const APIkey: string = '771d51cfcca51d5e93afff45320fea02';
@@ -248,47 +249,39 @@ export const tvSortAPI = {
 }
 
 export const sortedPageAPI = {
-    async getSortedMedia(mediaType: mediaType, initialSorting: initialSorting|null, page: number)
-        :Promise<undefined|GetMovieList|GetTVList<TVListObject>> {
-        let result ;
+    async getSortedMedia(mediaType: mediaType, initialSorting: initialSorting | null, page: number)
+        : Promise< GetMovieList | GetTVList<TVListObject>> {
+        let result;
         switch (mediaType) {
             case 'MOVIE':
                 switch (initialSorting) {
                     case 'popular':
-                       return   result = await mainPageAPI.getPopularMovies(page)
-                        break
+                        return result = await mainPageAPI.getPopularMovies(page)
                     case 'top-rated':
-                       return   result = await moviesSortAPI.getTopRated(page)
-                        break
+                        return result = await moviesSortAPI.getTopRated(page)
                     case 'upcoming':
-                        return  result = await moviesSortAPI.getUpcoming(page)
-                        break
+                        return result = await moviesSortAPI.getUpcoming(page)
                     case 'now-playing':
-                        return  result = await moviesSortAPI.getNowPlaying(page)
-                        break
+                        return result = await moviesSortAPI.getNowPlaying(page)
                 }
-                break
             case 'TV':
                 switch (initialSorting) {
                     case 'popular':
-                        return  result = await mainPageAPI.getPopularTV(page)
-                        break
+                        return result = await mainPageAPI.getPopularTV(page)
                     case 'top-rated':
-                        return  result = await tvSortAPI.getTopRated(page)
-                        break
+                        return result = await tvSortAPI.getTopRated(page)
                     case 'airing-today':
-                        return  result = await tvSortAPI.getAiringToday(page)
-                        break
+                        return result = await tvSortAPI.getAiringToday(page)
                     case 'on-the-air':
-                        return  result = await tvSortAPI.getOnTheAir(page)
-                        break
+                        return result = await tvSortAPI.getOnTheAir(page)
                 }
                 result = await tvSortAPI.getOnTheAir(page)
+                return result
 
         }
 
     },
-    async getMoviesSortedBy(MediaType: mediaType, pageSortType: initialSorting|null, page: number,
+    async getMoviesSortedBy(MediaType: mediaType, pageSortType: initialSorting | null, page: number,
                             genreSorting: null | number[], additionalSorting: null | sortingType,
                             dateRange: null | dates): Promise<sortedPageData> {
 
@@ -300,25 +293,29 @@ export const sortedPageAPI = {
         const media = MediaType.toLowerCase()
 
         const topRated =
-                 pageSortType === `top-rated` ? `&vote_count.gte=250` : ``
+                  pageSortType === `top-rated` ? `&vote_count.gte=250` : ``
         const nowPlaying =
-                 pageSortType === `now-playing` || `airing-today`
+                pageSortType === (`now-playing` || `airing-today` || `on-the-air` || `upcoming`)
                 ?
                 `&release_date.gte=${dateRange?.minimum}&release_date.lte=${dateRange?.maximum}`
                 : ``
-        const upcoming =
-                 pageSortType === `on-the-air` || `upcoming`
-                ?
-                `&release_date.gte=${dateRange?.minimum}&release_date.lte=${dateRange?.maximum}`
-
-                : ``
-        const genres = `&with_genres=${genreSorting?.join(`,`)}`
+        console.log(dateRange, 'DATE____RANGE')
+        const genres =
+                 genreSorting ?
+                `&with_genres=${genreSorting?.join(`,`)}`
+                :
+                ``
         const url =
-            `discover/${media}?api_key=${APIkey}&language=ru-RU${sortBy}
-             &page=${page}${topRated}${nowPlaying}${upcoming}${genres}`
+                `discover/${media}?api_key=${APIkey}&language=ru-RU${sortBy}&page=${page}${topRated}${nowPlaying}${genres}`
 
-        const result = await axiosInstance.get<sortedPageData>(`${url}`)
-        return result.data
+        const result = await axiosInstance.get<GetMovieList | GetTVList<TVListObject>>(`${url}`)
+        console.log(genreSorting,url)
+        const response = {
+            pageData: result.data.results,
+            totalPages:result.data.total_pages,
+            totalResults:result.data.total_results
+        }
+        return response
     }
 }
 

@@ -25,7 +25,7 @@ const SortedMoviesPage: FC<SortedMoviesPageProps> = (props) => {
                 {props.data && props.data?.map(el => {
 
                     const url = props.baseUrl + el.poster_path
-
+                    console.log(el.id)
                     return <div className={styles.item} key={el.id}>
                         <SmallMovieCard
                             date={el.release_date || el.first_air_date} id={el.id} title={el.title || el.name}
