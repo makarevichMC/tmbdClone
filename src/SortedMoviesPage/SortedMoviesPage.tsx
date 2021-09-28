@@ -6,7 +6,7 @@ import Button from '../Components/Common/Button/Button';
 import {filterType} from '../API/api';
 
 type SortedMoviesPageProps = {
-    data: MovieBarData[] | null
+    data?: MovieBarData[] | null
     baseUrl: string
     fetchMore: (type: mediaType, dataType: filterType) => any
     sortingType: filterType
@@ -15,12 +15,14 @@ type SortedMoviesPageProps = {
 
 const SortedMoviesPage: FC<SortedMoviesPageProps> = (props) => {
 
+
+
     return (
         <div className={styles.wrapper}>
             <div className={styles.filter_bar}>
             </div>
             <div className={styles.cards}>
-                {props.data && props.data.map(el => {
+                {props.data && props.data?.map(el => {
 
                     const url = props.baseUrl + el.poster_path
 

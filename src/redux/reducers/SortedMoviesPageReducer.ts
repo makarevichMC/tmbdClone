@@ -1,21 +1,33 @@
-import {Action, mediaType, MovieBarData} from '../../Types/Types'
+import {Action, dates, mediaType, MovieBarData} from '../../Types/Types'
 import {Dispatch} from 'redux'
-import {filterType, mainPageAPI, moviesSortAPI, tvSortAPI} from '../../API/api'
-import store, {RootState} from '../store'
+import {filterType, sortedPageAPI} from '../../API/api'
+import {RootState} from '../store'
 import {deepEqual} from '../../Utils/Utils';
 
-export type SortingType = 'popularity.desc' | 'vote_average.desc' | 'release_date.desc'
+
+export type sortingType =
+    'popularity.desc' | 'vote_average.desc' | 'release_date.desc'
     | 'popularity.asc' | 'vote_average.asc' | 'release_date.asc'
+    | 'first_air_date.asc' | 'first_air_date.desc'
 
+export type initialSorting =
+    'popular' | 'now-playing' | 'upcoming'
+    | 'top-rated' | 'airing-today' | 'on-the-air'
 
-
-export type initialSorting = 'popular' | 'now-playing' | 'upcoming' | 'top-rated'
-    | 'airing-today' | 'on-the-air'
+export type sortedPageData = {
+        pageData: MovieBarData[]
+        totalPages:number
+        totalResults:number
+}
 
 export type sortedMoviesPageState = {
-    pageData: MovieBarData[] | null
+    pageDataResponse:sortedPageData
     lastPage: number
-    currentSorting:filterType
+    initialSorting: initialSorting | null
+    additionalSorting:sortingType| null
+    genreSorting:number[]
+    dateRange:null | dates
+    pageCount:number|null
 }
 
 
@@ -23,185 +35,138 @@ export enum SortedMoviesPageActions {
     SET_PAGE = 'SET_PAGE',
     CHANGE_PAGE_NUMBER = 'CHANGE_PAGE',
     FETCH_NEXT_PAGE = 'FETCH_NEXT_PAGE',
-    SET_SORTING_TYPE = 'SET_SORTING_TYPE',
+    SET_INITIAL_SORTING_TYPE = 'SET_INITIAL_SORTING_TYPE',
 }
 
 export type fetchNextPageAction = {
-    type:SortedMoviesPageActions.FETCH_NEXT_PAGE,
-    payload:{
-        data:MovieBarData[]
+    type: SortedMoviesPageActions.FETCH_NEXT_PAGE,
+    payload: {
+        data: sortedPageData
     }
 }
 
 export type setSortedMoviesPageAction = {
     type: SortedMoviesPageActions.SET_PAGE,
     payload: {
-        data: MovieBarData[]
+        data: sortedPageData
     }
 }
 export type setPageNumberAction = {
-    type:SortedMoviesPageActions.CHANGE_PAGE_NUMBER,
+    type: SortedMoviesPageActions.CHANGE_PAGE_NUMBER,
     payload: {
-        pageNumber:number
+        pageNumber: number
     }
 }
-export type setSortingTypeAction = {
-    type:SortedMoviesPageActions.SET_SORTING_TYPE
-    payload:{
-        sortingType:null | initialSorting | SortingType
+export type setInitialSortingTypeAction = {
+    type: SortedMoviesPageActions.SET_INITIAL_SORTING_TYPE
+    payload: {
+        initialSorting: initialSorting | null
     }
 }
-const fetchNextPageAC = (data:MovieBarData[]):fetchNextPageAction => ({
-    type:SortedMoviesPageActions.FETCH_NEXT_PAGE,
-    payload:{
+const fetchNextPageAC = (data: sortedPageData): fetchNextPageAction => ({
+    type: SortedMoviesPageActions.FETCH_NEXT_PAGE,
+    payload: {
         data
     }
 })
 
-const setSortedMoviesPageAC = (data: MovieBarData[]): setSortedMoviesPageAction => ({
+const setSortedMoviesPageAC = (data: sortedPageData): setSortedMoviesPageAction => ({
     type: SortedMoviesPageActions.SET_PAGE,
     payload: {
         data
     }
 })
 
-const setPageNumberAC = (pageNumber:number):setPageNumberAction => ({
-    type:SortedMoviesPageActions.CHANGE_PAGE_NUMBER,
-    payload:{
+const setPageNumberAC = (pageNumber: number): setPageNumberAction => ({
+    type: SortedMoviesPageActions.CHANGE_PAGE_NUMBER,
+    payload: {
         pageNumber
     }
 })
 
-export const setCurrentSortingTypeAC = (sortingType:null | initialSorting | SortingType):setSortingTypeAction => ({
-    type:SortedMoviesPageActions.SET_SORTING_TYPE,
-    payload:{
-        sortingType
+export const setInitialSortingTypeAC = (initialSorting: null | initialSorting): setInitialSortingTypeAction => ({
+    type: SortedMoviesPageActions.SET_INITIAL_SORTING_TYPE,
+    payload: {
+        initialSorting
     }
 })
 
 const initialState: sortedMoviesPageState = {
-    pageData: null,
+    pageDataResponse:{
+        totalPages:0,
+        totalResults:0,
+        pageData:[]
+    },
     lastPage: 0,
-    currentSorting: null
+    initialSorting: null,
+    additionalSorting:null,
+    genreSorting:[],
+    dateRange:null,
+    pageCount:null
 }
 
 type sortedMoviesPageAction =
-    setSortedMoviesPageAction | setSortingTypeAction |
-    setPageNumberAction |fetchNextPageAction
+    setSortedMoviesPageAction | setInitialSortingTypeAction |
+    setPageNumberAction | fetchNextPageAction
 
 export const sortedMoviesPageReducer = (state = initialState, action: sortedMoviesPageAction): sortedMoviesPageState => {
     switch (action.type) {
         case SortedMoviesPageActions.SET_PAGE:
-            if (!deepEqual(state.pageData,action.payload.data)){
-                return {...state, pageData: action.payload.data}
+            if (!deepEqual(state.pageDataResponse, action.payload.data)) {
+                return {
+                    ...state,
+                    pageDataResponse: {
+                        ...action.payload.data
+                    }
+                }
             }
             break
-        case SortedMoviesPageActions.SET_SORTING_TYPE:
-            return {...state,currentSorting:action.payload.sortingType}
+        case SortedMoviesPageActions.SET_INITIAL_SORTING_TYPE:
+            return {...state,initialSorting:action.payload.initialSorting}
+            break
         case SortedMoviesPageActions.CHANGE_PAGE_NUMBER:
-            return {...state,lastPage:action.payload.pageNumber}
+            return {...state, lastPage: action.payload.pageNumber}
+            break
         case SortedMoviesPageActions.FETCH_NEXT_PAGE:
-            if (state.pageData){
-                return {...state,pageData:[...state.pageData,...action.payload.data]}
+            console.log(action.payload) //////////////////////////////////////////// !!!!!!!!!!!!
+            if (state.pageDataResponse.pageData&&action.payload.data.pageData) {
+                return {
+                    ...state,
+                    pageDataResponse: {
+                        ...state.pageDataResponse,
+                        pageData:[...state.pageDataResponse.pageData, ...action.payload.data.pageData]
+                    }
+                }
             }
             break
     }
-
-
     return state
 }
 
 export const setSortedMoviesThunk = (type: mediaType, dataType: initialSorting = 'popular') => async (dispatch: Dispatch<Action>) => {
-    let result
-    if (type === 'MOVIE') {
-        switch (dataType) {
-            case 'popular':
-                result = await mainPageAPI.getPopularMovies(1)
-                dispatch(setSortedMoviesPageAC(result.results))
-                break
-            case 'top-rated':
-                result = await moviesSortAPI.getTopRated(1)
-                dispatch(setSortedMoviesPageAC(result.results))
-                break
-            case 'upcoming':
-                result = await moviesSortAPI.getUpcoming(1)
-                dispatch(setSortedMoviesPageAC(result.results))
-                break
-            case 'now-playing':
-                result = await moviesSortAPI.getNowPlaying(1)
-                dispatch(setSortedMoviesPageAC(result.results))
-                break
+    const result = await sortedPageAPI.getSortedMedia(type,dataType,1)
+    if (result?.results){
+        dispatch(setInitialSortingTypeAC(dataType))
+        dispatch(setPageNumberAC(1))
+        const Data = {
+            pageData: result.results,
+            totalPages:result.total_pages,
+            totalResults:result.total_results
         }
-    } else if (type === 'TV'){
-        switch (dataType) {
-            case 'popular':
-                result = await mainPageAPI.getPopularTV(1)
-                dispatch(setSortedMoviesPageAC(result.results))
-                break
-            case 'top-rated':
-                result = await tvSortAPI.getTopRated(1)
-                dispatch(setSortedMoviesPageAC(result.results))
-                break
-            case 'airing-today':
-                result = await tvSortAPI.getAiringToday(1)
-                dispatch(setSortedMoviesPageAC(result.results))
-                break
-            case 'on-the-air':
-                result = await tvSortAPI.getOnTheAir(1)
-                dispatch(setSortedMoviesPageAC(result.results))
-        }
+        dispatch(setSortedMoviesPageAC(Data))
     }
-        dispatch(setCurrentSortingTypeAC(dataType))
-        dispatch(setPageNumberAC(1));
 }
 
-export const fetchMoreMoviesThunk = (type:mediaType,filterType:filterType) => async (dispatch:Dispatch<Action>,getState:()=>RootState) => {
-    // if (filterType ==='popular' || filterType ==='top-rated' || filterType === 'upcoming'||
-    //     filterType === 'now-playing'||filterType ==='on-the-air'||filterType ==='airing-today' ){
-    //     dispatch()
-    // }
-    let result
-    let page = getState().sortedPage.lastPage + 1;
+export const fetchMoreMoviesThunk = (type:mediaType) => async (dispatch: Dispatch<Action>, getState: () => RootState) => {
+    const state = getState().sortedPage
+    const page = state.lastPage + 1
+    const initialSorting = state.initialSorting
+    const additionalSorting = state.additionalSorting
+    const genreSorting = state.genreSorting
+    const dateRange = state.dateRange
 
-    console.log('PAGE', page,)
-    if (type === 'MOVIE') {
-        switch (filterType) {
-            case 'popular':
-                result = await mainPageAPI.getPopularMovies(page)
-                dispatch(fetchNextPageAC(result.results))
-                break
-            case 'top-rated':
-                result = await moviesSortAPI.getTopRated(page)
-                dispatch(fetchNextPageAC(result.results))
-                break
-            case 'upcoming':
-                result = await moviesSortAPI.getUpcoming(page)
-                dispatch(fetchNextPageAC(result.results))
-                break
-            case 'now-playing':
-                result = await moviesSortAPI.getNowPlaying(page)
-                dispatch(fetchNextPageAC(result.results))
-                break
-        }
-    } else if (type === 'TV'){
-        switch (filterType) {
-            case 'popular':
-                result = await mainPageAPI.getPopularTV(page)
-                dispatch(fetchNextPageAC(result.results))
-                break
-            case 'top-rated':
-                result = await tvSortAPI.getTopRated(page)
-                dispatch(fetchNextPageAC(result.results))
-                break
-            case 'airing-today':
-                result = await tvSortAPI.getAiringToday(page)
-                dispatch(fetchNextPageAC(result.results))
-                break
-            case 'on-the-air':
-                result = await tvSortAPI.getOnTheAir(page)
-                dispatch(fetchNextPageAC(result.results))
-        }
-    }
-    dispatch(setCurrentSortingTypeAC(filterType))
-    dispatch(setPageNumberAC(page));
+    const result = await sortedPageAPI.getMoviesSortedBy(type,initialSorting,page,genreSorting,additionalSorting,dateRange)
+
+    dispatch(fetchNextPageAC(result))
+    dispatch(setPageNumberAC(page))
 }

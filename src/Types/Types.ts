@@ -1,9 +1,13 @@
 //GENERAL TYPES
 
-const TV = 'TV';
-const MOVIE = 'MOVIE';
 
-export type mediaType = typeof TV | typeof MOVIE
+export type mediaType = 'TV' | 'MOVIE'
+
+export type Genre = {
+    id: number
+    genre: string
+}
+
 
 export interface Action {
     type: string
@@ -154,8 +158,8 @@ export interface TVDetails {
     type: string
     vote_average: number
     vote_count: number
-    title?:string
-    release_date?:string
+    title?: string
+    release_date?: string
 }
 
 export interface MovieListObject {
@@ -200,12 +204,15 @@ export interface GetTVList<T> {
     total_results: number
 }
 
-export interface GetMovieList extends GetTVList<MovieListObject> {
-    dates?: {
-        maximum: string
-        minimum: string
-    }
+export type dates = {
+    maximum: string
+    minimum: string
 }
+
+export interface GetMovieList extends GetTVList<MovieListObject> {
+    dates?: dates
+}
+
 
 // MOVIE PAGE REDUCER
 
@@ -220,24 +227,32 @@ export type Actor = {
     character: string
 }
 export type CrewMember = {
-    adult:boolean
-    gender:number | null
-    id:number
-    known_for_department:string
-    name:string
-    original_name:string
-    popularity:number
-    profile_path:string | null
-    credit_id:string
-    department:string
-    job:string
+    adult: boolean
+    gender: number | null
+    id: number
+    known_for_department: string
+    name: string
+    original_name: string
+    popularity: number
+    profile_path: string | null
+    credit_id: string
+    department: string
+    job: string
 
 }
 
 //CONFIGURATION REDUCER
-export interface setConfigAction {
-    type: 'SET_CONFIG'
-    payload: APIConfig
+export type Config = {
+    images: {
+        base_url: string
+        secure_base_url: string
+        backdrop_sizes: string[]
+        still_sizes: string[]
+        logo_sizes: string []
+        profile_sizes: string[]
+        poster_sizes: string []
+    },
+    change_keys: string[]
 }
 
 
@@ -300,11 +315,11 @@ export type setPopularTVAction = {
 
 export type setDayTrendingMoviesAction = {
     type: mainPageReducerActions.FETCH_TRENDING_MOVIES_DAY
-    payload: MovieListObject[]|MovieDetails[]
+    payload: MovieListObject[] | MovieDetails[]
 }
 export type setWeekTrendingMoviesAction = {
     type: mainPageReducerActions.FETCH_TRENDING_MOVIES_WEEK
-    payload: MovieListObject[]|MovieDetails[]
+    payload: MovieListObject[] | MovieDetails[]
 }
 export type setDayTrendingTVAction = {
     type: mainPageReducerActions.FETCH_TRENDING_TV_DAY
@@ -326,19 +341,19 @@ export interface mainPageState {
         tv: TVListObject[]
     }
     trendingBarDay: {
-        movies: MovieListObject[]|MovieDetails[],
-        tv: TVListObject[]|TVDetails[]
+        movies: MovieListObject[] | MovieDetails[],
+        tv: TVListObject[] | TVDetails[]
     }
     trendingBarWeek: {
-        movies: MovieListObject[]|MovieDetails[],
-        tv: TVListObject[]|TVDetails[]
+        movies: MovieListObject[] | MovieDetails[],
+        tv: TVListObject[] | TVDetails[]
     }
     trailerBar: videoListResultObject[]
 }
 
 
 //CONFIGURATION API
-export interface APIConfig {
+export interface APIConfigState {
     images: {
         base_url: string
         secure_base_url: string
@@ -349,7 +364,8 @@ export interface APIConfig {
         still_sizes: string[]
     },
     change_keys: string[]
-
+    tvGenres: Genre[]
+    movieGenres: Genre[]
 }
 
 
@@ -428,8 +444,8 @@ export type TVRecomendations = {
 
 
 export type ActorsAndCrew = {
-    cast:Actor[]
-    crew:CrewMember[]
+    cast: Actor[]
+    crew: CrewMember[]
 }
 
 //MAIN PAGE
@@ -491,68 +507,68 @@ export type personDetails = {
     name: string
     gender: number
     biography: string
-    place_of_birth: string|null
-    profile_path: string|null
+    place_of_birth: string | null
+    profile_path: string | null
 }
 export type movieAndTVCredits = {
-    id:number
-    original_language:string
-    episode_count:number
-    overview:string
-    genre_ids:number[]
-    name:string
+    id: number
+    original_language: string
+    episode_count: number
+    overview: string
+    genre_ids: number[]
+    name: string
     media_type: mediaType
-    poster_path:string | null
-    first_air_date:string
-    vote_average:number
-    vote_count:number
-    character:string
-    backdrop_path:string | null
-    popularity:number
-    credit_id:string
-    original_title:string
-    video:boolean
-    release_date:string
-    title:string
+    poster_path: string | null
+    first_air_date: string
+    vote_average: number
+    vote_count: number
+    character: string
+    backdrop_path: string | null
+    popularity: number
+    credit_id: string
+    original_title: string
+    video: boolean
+    release_date: string
+    title: string
 
 }
 export type crewCredits = {
-    id:number
-    department:string
-    original_language:string
-    episode_count:number
-    job:string
-    overview:string
-    origin_country:string[]
-    original_name:string
-    vote_count:number
-    name:string
-    media_type:typeof TV | typeof MOVIE
-    popularity:number
-    credit_id:string
-    backdrop_path:string | null
-    first_air_date:string
-    vote_average:number
-    genre_ids:string[]
-    poster_path:string | null
-    original_title:string
-    video:boolean
-    title:string
-    release_date:string
+    id: number
+    department: string
+    original_language: string
+    episode_count: number
+    job: string
+    overview: string
+    origin_country: string[]
+    original_name: string
+    vote_count: number
+    name: string
+    media_type: mediaType
+    popularity: number
+    credit_id: string
+    backdrop_path: string | null
+    first_air_date: string
+    vote_average: number
+    genre_ids: string[]
+    poster_path: string | null
+    original_title: string
+    video: boolean
+    title: string
+    release_date: string
 }
 export type personCredits = {
-    cast:movieAndTVCredits[]
-    crew:crewCredits[]
+    cast: movieAndTVCredits[]
+    crew: crewCredits[]
 }
 
-//PERSOM PAGE
+//PERSON PAGE
 export type CreditsData = {
-    id:number
-    title:string
-    job?:string
-    department:string
-    character?:string
-    date:string
-    episodeCount?:number
-    media_type: typeof TV | typeof MOVIE
+    id: number
+    title: string
+    job?: string
+    department: string
+    character?: string
+    date: string
+    episodeCount?: number
+    media_type: mediaType
 }
