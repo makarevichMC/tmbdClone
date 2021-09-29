@@ -13,9 +13,7 @@ import {
     IToken,
     IUserInfo,
     mediaType,
-    MovieBarData,
     MovieDetails,
-    MovieListObject,
     MovieRecomendations,
     personCredits,
     personDetails,
@@ -25,8 +23,12 @@ import {
     videoResponse
 } from '../Types/Types';
 
-import {initialSorting, sortedPageData, sortingType} from '../redux/reducers/SortedMoviesPageReducer';
-import {log} from "util";
+import {
+    initialSortedData,
+    initialSorting,
+    sortedPageData,
+    sortingType
+} from '../redux/reducers/SortedMoviesPageReducer';
 
 
 const APIkey: string = '771d51cfcca51d5e93afff45320fea02';
@@ -248,73 +250,115 @@ export const tvSortAPI = {
     },
 }
 
+
+export type getSortedTV = {
+    mediaType: 'TV'
+    initialSorting: 'popular' | 'top-rated' | 'airing-today' | 'on-the-air'
+}
+export type getSortedMovie = {
+    mediaType: 'MOVIE'
+    initialSorting: 'popular' | 'now-playing' | 'upcoming' | 'top-rated'
+}
+
+export type getSortedMediaArg = getSortedTV | getSortedMovie
+
+
 export const sortedPageAPI = {
-    async getSortedMedia(mediaType: mediaType, initialSorting: initialSorting | null, page: number)
-        : Promise< GetMovieList | GetTVList<TVListObject>> {
+    async getSortedMedia(typeAndSorting: getSortedMediaArg, page: number)
+        : Promise<initialSortedData> {
         let result;
-        switch (mediaType) {
+        console.log(typeAndSorting)
+        switch (typeAndSorting.mediaType) {
             case 'MOVIE':
-                switch (initialSorting) {
+                switch (typeAndSorting.initialSorting) {
+
                     case 'popular':
-                        return result = await mainPageAPI.getPopularMovies(page)
+                        result = await mainPageAPI.getPopularMovies(page)
+                        break
                     case 'top-rated':
-                        return result = await moviesSortAPI.getTopRated(page)
+                        result = await moviesSortAPI.getTopRated(page)
+                        break
                     case 'upcoming':
-                        return result = await moviesSortAPI.getUpcoming(page)
+                        result = await moviesSortAPI.getUpcoming(page)
+                        break
                     case 'now-playing':
-                        return result = await moviesSortAPI.getNowPlaying(page)
+                        result = await moviesSortAPI.getNowPlaying(page)
+                        break
                 }
+                let response = {
+                    results: result.results,
+                    totalPages: result.total_pages,
+                    totalResults: result.total_results,
+                    dates: result.dates ? result.dates : null
+                }
+                return response
             case 'TV':
-                switch (initialSorting) {
+                switch (typeAndSorting.initialSorting) {
                     case 'popular':
-                        return result = await mainPageAPI.getPopularTV(page)
+                        result = await mainPageAPI.getPopularTV(page)
+                        break
                     case 'top-rated':
-                        return result = await tvSortAPI.getTopRated(page)
+                        result = await tvSortAPI.getTopRated(page)
+                        break
                     case 'airing-today':
-                        return result = await tvSortAPI.getAiringToday(page)
+                        result = await tvSortAPI.getAiringToday(page)
+                        break
                     case 'on-the-air':
-                        return result = await tvSortAPI.getOnTheAir(page)
+                        result = await tvSortAPI.getOnTheAir(page)
+                        break
                 }
-                result = await tvSortAPI.getOnTheAir(page)
-                return result
-
+               let tvResponse = {
+                    results: result.results,
+                    totalPages: result.total_pages,
+                    totalResults: result.total_results,
+                    dates: null
+                }
+                return tvResponse
         }
-
     },
+
     async getMoviesSortedBy(MediaType: mediaType, pageSortType: initialSorting | null, page: number,
                             genreSorting: null | number[], additionalSorting: null | sortingType,
                             dateRange: null | dates): Promise<sortedPageData> {
 
         let sortBy =
-                 additionalSorting ? `&sort_by=${additionalSorting}` : ``
+            additionalSorting ? `&sort_by=${additionalSorting}` : ``
 
         if (pageSortType === `popular`) sortBy = `&sort_by=popularity.desc`
 
         const media = MediaType.toLowerCase()
 
+        // if(pageSortType === `top-rated`){
+        //     sortBy = ''
+        // }
         const topRated =
-                  pageSortType === `top-rated` ? `&vote_count.gte=250` : ``
+            pageSortType === `top-rated` ? `&vote_count.gte=300` : ``
+
         const nowPlaying =
-                pageSortType === (`now-playing` || `airing-today` || `on-the-air` || `upcoming`)
+            pageSortType === (`now-playing` || `upcoming`) && dateRange
                 ?
-                `&release_date.gte=${dateRange?.minimum}&release_date.lte=${dateRange?.maximum}`
+                `&primary_release_date.gte=${dateRange?.minimum}&primary_release_date.lte=${dateRange?.maximum}`
                 : ``
-        console.log(dateRange, 'DATE____RANGE')
+        const onTheAir = pageSortType === (`airing-today` || `on-the-air`) && dateRange
+            ?
+            `&air_date.gte=${dateRange?.minimum}&air_date.lte=${dateRange?.maximum}`
+            : ``
         const genres =
-                 genreSorting ?
+            genreSorting ?
                 `&with_genres=${genreSorting?.join(`,`)}`
                 :
                 ``
         const url =
-                `discover/${media}?api_key=${APIkey}&language=ru-RU${sortBy}&page=${page}${topRated}${nowPlaying}${genres}`
+            `discover/${media}?api_key=${APIkey}&language=ru-RU${sortBy}&page=${page}${topRated}${nowPlaying}${genres}${onTheAir}`
 
         const result = await axiosInstance.get<GetMovieList | GetTVList<TVListObject>>(`${url}`)
-        console.log(genreSorting,url)
+
         const response = {
             pageData: result.data.results,
-            totalPages:result.data.total_pages,
-            totalResults:result.data.total_results
+            totalPages: result.data.total_pages,
+            totalResults: result.data.total_results
         }
+        console.log(url)
         return response
     }
 }

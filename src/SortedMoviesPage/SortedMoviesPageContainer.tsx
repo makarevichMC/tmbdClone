@@ -2,7 +2,7 @@ import React, {FC, useEffect} from 'react'
 import {connect, ConnectedProps} from 'react-redux'
 import {useLocation, useParams} from 'react-router-dom'
 import {RootState} from '../redux/store'
-import {fetchMoreMoviesThunk, initialSorting, setSortedMoviesThunk} from '../redux/reducers/SortedMoviesPageReducer'
+import {fetchMoreMoviesThunk, initialSorting, setSortedMoviesThunk,} from '../redux/reducers/SortedMoviesPageReducer'
 import {mediaType} from '../Types/Types'
 import SortedMoviesPage from './SortedMoviesPage';
 
@@ -22,7 +22,7 @@ const SortedMoviesPageContainer: FC<ReduxProps> = (props) => {
     } else mediaType = 'MOVIE'
 
     useEffect(() => {
-        props.setSortedMoviesThunk(mediaType, params.option)
+        props.setSortedMoviesThunk(mediaType, params.option);
     }, [mediaType,params.option])
 
 
@@ -45,7 +45,7 @@ const mapStateToProps = (state: RootState) => {
     }
 }
 
-const connector = connect(mapStateToProps, {setSortedMoviesThunk,fetchMoreMoviesThunk})
+const connector = connect(mapStateToProps, {fetchMoreMoviesThunk,setSortedMoviesThunk})
 
 type ReduxProps = ConnectedProps<typeof connector>
 

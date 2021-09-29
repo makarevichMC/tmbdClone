@@ -4,11 +4,12 @@ import SmallMovieCard from '../Components/MainPage/MoviesSection/MoviesBar/Small
 import styles from './SortedMoviesPage.module.css'
 import Button from '../Components/Common/Button/Button';
 import {filterType} from '../API/api';
+import {initialSorting} from '../redux/reducers/SortedMoviesPageReducer';
 
 type SortedMoviesPageProps = {
     data?: MovieBarData[] | null
     baseUrl: string
-    fetchMore: (type: mediaType, dataType: filterType) => any
+    fetchMore: (type: mediaType, dataType?: initialSorting) => any
     sortingType: filterType
     mediaType: mediaType
 }
@@ -25,7 +26,6 @@ const SortedMoviesPage: FC<SortedMoviesPageProps> = (props) => {
                 {props.data && props.data?.map(el => {
 
                     const url = props.baseUrl + el.poster_path
-                    console.log(el.id)
                     return <div className={styles.item} key={el.id}>
                         <SmallMovieCard
                             date={el.release_date || el.first_air_date} id={el.id} title={el.title || el.name}
@@ -38,7 +38,7 @@ const SortedMoviesPage: FC<SortedMoviesPageProps> = (props) => {
                 <Button
                     width={'100%'} height={'40px'} text={'Загрузить ещё'}
                     callback={() => {
-                        props.fetchMore(props.mediaType, props.sortingType)
+                        props.fetchMore(props.mediaType)
                     }}
                 />
             </div>

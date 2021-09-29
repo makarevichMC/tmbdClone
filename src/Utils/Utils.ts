@@ -1,3 +1,6 @@
+import {mediaType} from '../Types/Types';
+import {getSortedMediaArg} from '../API/api';
+import {initialSorting} from '../redux/reducers/SortedMoviesPageReducer';
 
 
 export   const hexToRGB = (hex: Array<string>, alpha: number) => {
@@ -27,4 +30,23 @@ export const deepEqual = (x:any,y:any) => {
         else return false
     }
     return true
+}
+
+export const convertMediaType = (type:mediaType,dataType:initialSorting):getSortedMediaArg => {
+
+    switch (type) {
+        case 'TV':
+            let tvSorting = dataType as  'popular' | 'top-rated' | 'airing-today' | 'on-the-air'
+            return {
+                mediaType:type,
+                initialSorting:tvSorting
+            }
+
+        case 'MOVIE':
+            let movieSorting = dataType as  'popular' | 'top-rated' | 'now-playing' | 'upcoming'
+            return {
+                mediaType:type,
+                initialSorting:movieSorting
+            }
+    }
 }

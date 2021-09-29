@@ -561,6 +561,7 @@ export type personCredits = {
     crew: crewCredits[]
 }
 
+
 //PERSON PAGE
 export type CreditsData = {
     id: number
