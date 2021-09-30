@@ -42,7 +42,15 @@ export enum SortedMoviesPageActions {
     CHANGE_PAGE_NUMBER = 'CHANGE_PAGE',
     FETCH_NEXT_PAGE = 'FETCH_NEXT_PAGE',
     SET_INITIAL_SORTING_TYPE = 'SET_INITIAL_SORTING_TYPE',
-    SET_DATES='SET_DATES'
+    SET_DATES='SET_DATES',
+    SET_ADDITIONAL_SORTING = 'SET_ADDITIONAL_SORTING'
+}
+
+export type setAdditionalSortingAction = {
+    type:SortedMoviesPageActions.SET_ADDITIONAL_SORTING,
+    payload:{
+        additionalSorting:sortingType | null
+    }
 }
 export type setDatesAction = {
     type:SortedMoviesPageActions.SET_DATES
@@ -75,6 +83,14 @@ export type setInitialSortingTypeAction = {
         initialSorting: initialSorting | null
     }
 }
+
+export const setAdditionalSortingAC = (additionalSorting:sortingType):setAdditionalSortingAction => ({
+    type:SortedMoviesPageActions.SET_ADDITIONAL_SORTING,
+    payload:{
+        additionalSorting
+    }
+})
+
 const setDatesAC = (dates:dates|null):setDatesAction=>({
     type:SortedMoviesPageActions.SET_DATES,
     payload:{
@@ -127,9 +143,14 @@ const initialState: sortedMoviesPageState = {
 type sortedMoviesPageAction =
     setSortedMoviesPageAction | setInitialSortingTypeAction |
     setPageNumberAction | fetchNextPageAction |setDatesAction
+    |setAdditionalSortingAction
 
 export const sortedMoviesPageReducer = (state = initialState, action: sortedMoviesPageAction): sortedMoviesPageState => {
     switch (action.type) {
+        case SortedMoviesPageActions.SET_ADDITIONAL_SORTING:
+            return {
+                ...state,additionalSorting:action.payload.additionalSorting
+            }
         case SortedMoviesPageActions.SET_DATES:
             return {
                 ...state,dateRange:action.payload.dates

@@ -321,28 +321,45 @@ export const sortedPageAPI = {
                             genreSorting: null | number[], additionalSorting: null | sortingType,
                             dateRange: null | dates): Promise<sortedPageData> {
 
+
+        let dateToday = new Date();
+        let dateTodayString = dateToday.toJSON().slice(0,10);
+        let todayPlusWeek = dateToday.setDate(dateToday.getDate() + 7);
+        let todayPlusWeekString = new Date(todayPlusWeek).toJSON().slice(0,10);
+
         let sortBy =
             additionalSorting ? `&sort_by=${additionalSorting}` : ``
 
-        if (pageSortType === `popular`) sortBy = `&sort_by=popularity.desc`
+
 
         const media = MediaType.toLowerCase()
 
-        // if(pageSortType === `top-rated`){
-        //     sortBy = ''
-        // }
+
         const topRated =
             pageSortType === `top-rated` ? `&vote_count.gte=300` : ``
 
-        const nowPlaying =
-            pageSortType === (`now-playing` || `upcoming`) && dateRange
-                ?
-                `&primary_release_date.gte=${dateRange?.minimum}&primary_release_date.lte=${dateRange?.maximum}`
-                : ``
-        const onTheAir = pageSortType === (`airing-today` || `on-the-air`) && dateRange
-            ?
-            `&air_date.gte=${dateRange?.minimum}&air_date.lte=${dateRange?.maximum}`
-            : ``
+        let nowPlaying;
+
+        if (
+            (pageSortType === `now-playing` || pageSortType === `upcoming`)
+            && dateRange){
+            nowPlaying = `&release_date.gte=${dateRange?.minimum}&release_date.lte=${dateRange?.maximum}`
+        } else {
+            nowPlaying = ``
+        }
+
+        console.log(dateTodayString,'dateTodayString')
+        console.log(todayPlusWeekString,'todayPlusWeekString')
+        let onTheAir;
+        if (pageSortType === `on-the-air`) {
+            onTheAir = `&air_date.gte=${dateTodayString}&air_date.lte=${todayPlusWeekString}`
+        } else if (pageSortType === `airing-today`){
+            onTheAir = `&air_date.gte=${dateTodayString}&air_date.lte=${dateTodayString}`
+        }
+        else {
+            onTheAir = ``
+        }
+        console.log('dateRange',dateRange)
         const genres =
             genreSorting ?
                 `&with_genres=${genreSorting?.join(`,`)}`
