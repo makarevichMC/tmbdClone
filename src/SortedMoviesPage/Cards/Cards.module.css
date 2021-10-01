@@ -1,0 +1,13 @@
+.item{
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    width: min-content;
+    box-shadow: 0 0 5px 5px rgba(0,0,0,0.1);
+}
+
+.cards{
+    display: grid;
+    grid-template-columns: repeat(5,1fr);
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
+}

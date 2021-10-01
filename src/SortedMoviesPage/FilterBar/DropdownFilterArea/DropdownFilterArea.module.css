@@ -1,0 +1,21 @@
+.filter_toggle{
+    font-size: 18px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    justify-content: space-between;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 0 5px 5px rgba(0,0,0,0.1);
+    cursor: pointer;
+}
+
+.active svg{
+    transform: rotate(90deg);
+    transition: transform 0.1s;
+}
+
+.filter_toggle svg{
+    height: 16px;
+}

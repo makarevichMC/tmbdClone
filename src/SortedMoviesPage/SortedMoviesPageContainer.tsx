@@ -54,7 +54,7 @@ const SortedMoviesPageContainer: FC<ReduxProps> = (props) => {
 
 
     return (
-        <SortedMoviesPage
+        <SortedMoviesPage test={'ss'}
             sortingType={props.sortingType}
             baseUrl={props.baseUrl} data={props.initialData}
             fetchMore={props.fetchMoreMoviesThunk} mediaType={mediaType}/>
