@@ -1,0 +1,23 @@
+.wrapper{
+    height: 150px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+.wrapper li{
+    list-style: none;
+    padding: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.wrapper li:hover{
+    background-color: #F8F9FA;
+}
+.active{
+    font-weight: 600;
+}
+.wrapper li.active:hover{
+    background-color: #01b4e4;
+    color:white;
+    transition: background-color 0.2s;
+}

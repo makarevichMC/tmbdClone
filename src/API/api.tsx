@@ -267,7 +267,7 @@ export const sortedPageAPI = {
     async getSortedMedia(typeAndSorting: getSortedMediaArg, page: number)
         : Promise<initialSortedData> {
         let result;
-        console.log(typeAndSorting)
+
         switch (typeAndSorting.mediaType) {
             case 'MOVIE':
                 switch (typeAndSorting.initialSorting) {
@@ -308,9 +308,9 @@ export const sortedPageAPI = {
                         break
                 }
                let tvResponse = {
-                    results: result.results,
-                    totalPages: result.total_pages,
-                    totalResults: result.total_results,
+                    results: result?.results,
+                    totalPages: result?.total_pages,
+                    totalResults: result?.total_results,
                     dates: null
                 }
                 return tvResponse
@@ -348,8 +348,7 @@ export const sortedPageAPI = {
             nowPlaying = ``
         }
 
-        console.log(dateTodayString,'dateTodayString')
-        console.log(todayPlusWeekString,'todayPlusWeekString')
+
         let onTheAir;
         if (pageSortType === `on-the-air`) {
             onTheAir = `&air_date.gte=${dateTodayString}&air_date.lte=${todayPlusWeekString}`
@@ -359,7 +358,7 @@ export const sortedPageAPI = {
         else {
             onTheAir = ``
         }
-        console.log('dateRange',dateRange)
+
         const genres =
             genreSorting ?
                 `&with_genres=${genreSorting?.join(`,`)}`
@@ -375,7 +374,7 @@ export const sortedPageAPI = {
             totalPages: result.data.total_pages,
             totalResults: result.data.total_results
         }
-        console.log(url)
+
         return response
     }
 }

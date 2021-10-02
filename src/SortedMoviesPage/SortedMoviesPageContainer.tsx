@@ -47,14 +47,19 @@ const SortedMoviesPageContainer: FC<ReduxProps> = (props) => {
                 }
                 break
         }
+
         props.setAdditionalSortingAC(additionalsorting);
 
         props.setSortedMoviesThunk(mediaType, params.option);
     }, [mediaType, params.option])
 
-
+    const setPage = ()=>{
+        props.setSortedMoviesThunk(mediaType,params.option)
+    }
     return (
         <SortedMoviesPage
+            setPage={setPage}
+            setAdditionalSorting={props.setAdditionalSortingAC}
             additionalSorting={props.additionalSorting}
             sortingType={props.sortingType}
             baseUrl={props.baseUrl} data={props.initialData}

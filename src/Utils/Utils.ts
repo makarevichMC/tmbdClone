@@ -1,6 +1,6 @@
-import {mediaType} from '../Types/Types';
+import {labels, mediaType} from '../Types/Types';
 import {getSortedMediaArg} from '../API/api';
-import {initialSorting} from '../redux/reducers/SortedMoviesPageReducer';
+import {initialSorting, sortingType} from '../redux/reducers/SortedMoviesPageReducer';
 
 
 export   const hexToRGB = (hex: Array<string>, alpha: number) => {
@@ -47,6 +47,52 @@ export const convertMediaType = (type:mediaType,dataType:initialSorting):getSort
             return {
                 mediaType:type,
                 initialSorting:movieSorting
+            }
+    }
+}
+
+
+export const filterToLabel = (filter:sortingType):labels =>{
+    switch (filter) {
+        case "popularity.asc":
+            return "Популярности (возрастание)"
+        case "popularity.desc":
+            return "Популярности (убывание)"
+        case "first_air_date.asc":
+        case "release_date.asc":
+            return "Дате выпуска (возрастание)"
+        case "first_air_date.desc":
+        case "release_date.desc":
+            return "Дате выпуска (убывание)"
+        case "vote_average.asc":
+            return "Рейтингу (возрастание)"
+        case "vote_average.desc":
+            return "Рейтингу (убывание)"
+    }
+}
+
+
+export const LabelToFilter = (label:labels,mediaType:mediaType):sortingType => {
+    switch (label) {
+        case "Популярности (возрастание)":
+            return "popularity.asc"
+        case "Популярности (убывание)":
+            return "popularity.desc"
+        case "Рейтингу (возрастание)":
+            return "vote_average.asc"
+        case "Рейтингу (убывание)":
+            return "vote_average.desc"
+        case "Дате выпуска (возрастание)":
+            if(mediaType==="TV"){
+                return "first_air_date.asc"
+            } else {
+                return "release_date.asc"
+            }
+        case "Дате выпуска (убывание)":
+            if(mediaType==="TV"){
+                return "first_air_date.desc"
+            } else {
+                return "release_date.desc"
             }
     }
 }
