@@ -1,14 +1,7 @@
 .filter_toggle{
-    font-size: 18px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    justify-content: space-between;
     border: 1px solid rgba(0,0,0,0.1);
     border-radius: 12px;
     box-shadow: 0 0 5px 5px rgba(0,0,0,0.1);
-    cursor: pointer;
 }
 
 .active svg{
@@ -18,4 +11,25 @@
 
 .filter_toggle svg{
     height: 16px;
+}
+
+.main_content{
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 15px;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.children{
+    width: 100%;
+    border-top:1px solid rgba(0,0,0,0.1);
+    padding: 15px;
+}
+.children span{
+    display: block;
+    color: rgba(0,0,0,0.5);
+    padding-bottom: 10px;
 }

@@ -3,7 +3,7 @@ import {mediaType, MovieBarData} from '../Types/Types';
 import styles from './SortedMoviesPage.module.css'
 import Button from '../Components/Common/Button/Button';
 import {filterType} from '../API/api';
-import {initialSorting} from '../redux/reducers/SortedMoviesPageReducer';
+import {initialSorting, sortingType} from '../redux/reducers/SortedMoviesPageReducer';
 import Cards from "./Cards/Cards";
 import FilterBar from "./FilterBar/FilterBar";
 
@@ -13,13 +13,13 @@ type SortedMoviesPageProps = {
     fetchMore: (type: mediaType, dataType?: initialSorting) => any
     sortingType: filterType
     mediaType: mediaType
-    test: string
+    additionalSorting:sortingType | null
 }
 
 const SortedMoviesPage: FC<SortedMoviesPageProps> = (props) => {
     return (
         <div className={styles.wrapper}>
-            <FilterBar/>
+            <FilterBar initialFilter={props.additionalSorting}/>
             <Cards {...props}/>
             <div className={styles.button}>
                 <Button

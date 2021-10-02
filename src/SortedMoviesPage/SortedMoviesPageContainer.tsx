@@ -54,7 +54,8 @@ const SortedMoviesPageContainer: FC<ReduxProps> = (props) => {
 
 
     return (
-        <SortedMoviesPage test={'ss'}
+        <SortedMoviesPage
+            additionalSorting={props.additionalSorting}
             sortingType={props.sortingType}
             baseUrl={props.baseUrl} data={props.initialData}
             fetchMore={props.fetchMoreMoviesThunk} mediaType={mediaType}/>
@@ -68,7 +69,8 @@ const mapStateToProps = (state: RootState) => {
         lastPage: state.sortedPage.lastPage,
         baseUrl: state.config.images.base_url + state.config.images.poster_sizes[2],
         currentPage: state.sortedPage.lastPage,
-        sortingType: state.sortedPage.initialSorting
+        sortingType: state.sortedPage.initialSorting,
+        additionalSorting:state.sortedPage.additionalSorting
     }
 }
 

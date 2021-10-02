@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import './App.css';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 import Profile from './Components/Profile/Profile';
 import HeaderContainer from './Components/Header/HeaderContainer';
 import LoginFormContainer from './Components/Login/LoginFormContainer';
