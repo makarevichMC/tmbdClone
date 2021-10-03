@@ -12,10 +12,10 @@ const MainNav:FC = () => {
 
     return (
         <div className={styles.wrapper}>
-            <NavItem text={'Фильмы'} url={'/movie'}>
+            <NavItem text={'Фильмы'} url={'/movies/option/popular'}>
                 <MovieMenu/>
             </NavItem>
-            <NavItem text={'Сериалы'} url={'tv'}>
+            <NavItem text={'Сериалы'} url={'/tv/option/popular'}>
                 <TVmenu/>
             </NavItem>
             <NavItem text={'Люди'} url={'person'}>

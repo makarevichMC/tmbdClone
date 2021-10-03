@@ -3,7 +3,7 @@ import {
     ActorsAndCrew,
     Config,
     dates,
-    Genre,
+    Genre, GenreResponse,
     GetMovieList,
     getMovies,
     getTV,
@@ -51,8 +51,8 @@ export const configAPI = {
     },
     async getGenres(mediaType: mediaType): Promise<Genre[]> {
         let type = mediaType.toLowerCase()
-        let response = await axiosInstance.get<Genre[]>(`genre/${type}/list?api_key=${APIkey}&language=ru-RU`)
-        return response.data
+        let response = await axiosInstance.get<GenreResponse>(`genre/${type}/list?api_key=${APIkey}&language=ru-RU`)
+        return response.data.genres
     }
 }
 
@@ -285,6 +285,7 @@ export const sortedPageAPI = {
                         result = await moviesSortAPI.getNowPlaying(page)
                         break
                 }
+
                 let response = {
                     results: result.results,
                     totalPages: result.total_pages,
@@ -376,6 +377,7 @@ export const sortedPageAPI = {
         }
 
         return response
-    }
+    },
+
 }
 

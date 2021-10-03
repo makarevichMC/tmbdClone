@@ -59,10 +59,10 @@ export const filterToLabel = (filter:sortingType):labels =>{
         case "popularity.desc":
             return "Популярности (убывание)"
         case "first_air_date.asc":
-        case "release_date.asc":
+        case "primary_release_date.asc":
             return "Дате выпуска (возрастание)"
         case "first_air_date.desc":
-        case "release_date.desc":
+        case "primary_release_date.desc":
             return "Дате выпуска (убывание)"
         case "vote_average.asc":
             return "Рейтингу (возрастание)"
@@ -86,13 +86,13 @@ export const LabelToFilter = (label:labels,mediaType:mediaType):sortingType => {
             if(mediaType==="TV"){
                 return "first_air_date.asc"
             } else {
-                return "release_date.asc"
+                return "primary_release_date.asc"
             }
         case "Дате выпуска (убывание)":
             if(mediaType==="TV"){
                 return "first_air_date.desc"
             } else {
-                return "release_date.desc"
+                return "primary_release_date.desc"
             }
     }
 }

@@ -4,7 +4,7 @@ import {initialSorting} from "../../redux/reducers/SortedMoviesPageReducer";
 import {filterType} from "../../API/api";
 import styles from "./Cards.module.css";
 import SmallMovieCard from "../../Components/MainPage/MoviesSection/MoviesBar/SmallMovieCard/SmallMovieCard";
-
+import noImage from '../../images/noImage.jpg'
 
 type CardsProps = {
     data?: MovieBarData[] | null
@@ -14,13 +14,16 @@ type CardsProps = {
     mediaType: mediaType
 }
 
-const Cards:FC<CardsProps> = (props) => {
+const Cards: FC<CardsProps> = (props) => {
     return (
         //@ts-ignore
         <div className={styles.cards}>
             {props.data && props.data?.map(el => {
+                const url =
+                        el.poster_path ?
+                        props.baseUrl + el.poster_path :
+                        noImage
 
-                const url = props.baseUrl + el.poster_path
                 //@ts-ignore
                 return <div className={styles.item} key={el.id}>
                     <SmallMovieCard

@@ -12,8 +12,8 @@ export type initialSortedData = {
 }
 
 export type sortingType =
-    'popularity.desc' | 'vote_average.desc' | 'release_date.desc'
-    | 'popularity.asc' | 'vote_average.asc' | 'release_date.asc'
+    'popularity.desc' | 'vote_average.desc' | 'primary_release_date.desc'
+    | 'popularity.asc' | 'vote_average.asc' | 'primary_release_date.asc'
     | 'first_air_date.asc' | 'first_air_date.desc'
 
 export type initialSorting =
@@ -43,7 +43,14 @@ export enum SortedMoviesPageActions {
     FETCH_NEXT_PAGE = 'FETCH_NEXT_PAGE',
     SET_INITIAL_SORTING_TYPE = 'SET_INITIAL_SORTING_TYPE',
     SET_DATES='SET_DATES',
-    SET_ADDITIONAL_SORTING = 'SET_ADDITIONAL_SORTING'
+    SET_ADDITIONAL_SORTING = 'SET_ADDITIONAL_SORTING',
+    SET_GENGRE_SORTING = 'SET_GENGRE_SORTING'
+}
+export type setGenreSortingAction = {
+    type:SortedMoviesPageActions.SET_GENGRE_SORTING,
+    payload:{
+        genresID:number[]|null
+    }
 }
 
 export type setAdditionalSortingAction = {
@@ -83,6 +90,12 @@ export type setInitialSortingTypeAction = {
         initialSorting: initialSorting | null
     }
 }
+export const setGenreSortingAC = (genresID:number[]|null):setGenreSortingAction => ({
+    type:SortedMoviesPageActions.SET_GENGRE_SORTING,
+    payload:{
+        genresID
+    }
+})
 
 export const setAdditionalSortingAC = (additionalSorting:sortingType):setAdditionalSortingAction => ({
     type:SortedMoviesPageActions.SET_ADDITIONAL_SORTING,
@@ -143,7 +156,7 @@ const initialState: sortedMoviesPageState = {
 type sortedMoviesPageAction =
     setSortedMoviesPageAction | setInitialSortingTypeAction |
     setPageNumberAction | fetchNextPageAction |setDatesAction
-    |setAdditionalSortingAction
+    |setAdditionalSortingAction |setGenreSortingAction
 
 export const sortedMoviesPageReducer = (state = initialState, action: sortedMoviesPageAction): sortedMoviesPageState => {
     switch (action.type) {
@@ -175,6 +188,8 @@ export const sortedMoviesPageReducer = (state = initialState, action: sortedMovi
                     pageData: [...state.pageDataResponse.pageData, ...action.payload.data.pageData]
                 }
             }
+        case SortedMoviesPageActions.SET_GENGRE_SORTING:
+            return {...state,genreSorting:action.payload.genresID}
     }
     return state
 

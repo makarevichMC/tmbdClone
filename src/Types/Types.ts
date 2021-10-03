@@ -7,7 +7,7 @@ export type mediaType = 'TV' | 'MOVIE'
 
 export type Genre = {
     id: number
-    genre: string
+    name: string
 }
 
 
@@ -369,7 +369,9 @@ export interface APIConfigState {
     tvGenres: Genre[]
     movieGenres: Genre[]
 }
-
+export type GenreResponse = {
+    genres:Genre[]
+}
 
 //AUTHORIZATION API
 export interface IToken extends IgetToken, IAuthErr {

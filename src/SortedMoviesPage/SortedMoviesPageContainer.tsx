@@ -5,7 +5,7 @@ import {RootState} from '../redux/store'
 import {
     fetchMoreMoviesThunk,
     initialSorting,
-    setAdditionalSortingAC,
+    setAdditionalSortingAC, setGenreSortingAC,
     setSortedMoviesThunk, sortingType,
 } from '../redux/reducers/SortedMoviesPageReducer'
 import {mediaType} from '../Types/Types'
@@ -19,7 +19,6 @@ const SortedMoviesPageContainer: FC<ReduxProps> = (props) => {
 
     const params = useParams<SortedPageParams>()
     const location = useLocation()
-
     let mediaType: mediaType
 
     if (location.pathname.split('/')[1] === 'tv') {
@@ -47,18 +46,25 @@ const SortedMoviesPageContainer: FC<ReduxProps> = (props) => {
                 }
                 break
         }
+        props.setGenreSortingAC(null)
 
-        props.setAdditionalSortingAC(additionalsorting);
+        props.setAdditionalSortingAC(additionalsorting)
 
-        props.setSortedMoviesThunk(mediaType, params.option);
+        props.setSortedMoviesThunk(mediaType, params.option)
     }, [mediaType, params.option])
 
     const setPage = ()=>{
         props.setSortedMoviesThunk(mediaType,params.option)
     }
+    const applyFilters = (genresID:number[]) => {
+        props.setGenreSortingAC(genresID)
+        props.setSortedMoviesThunk(mediaType,params.option)
+    }
     return (
         <SortedMoviesPage
-            setPage={setPage}
+            setPage={setPage} movieGenres={props.movieGenres}
+            tvGenres={props.tvGenres}
+            applyFilters = {applyFilters}
             setAdditionalSorting={props.setAdditionalSortingAC}
             additionalSorting={props.additionalSorting}
             sortingType={props.sortingType}
@@ -75,7 +81,9 @@ const mapStateToProps = (state: RootState) => {
         baseUrl: state.config.images.base_url + state.config.images.poster_sizes[2],
         currentPage: state.sortedPage.lastPage,
         sortingType: state.sortedPage.initialSorting,
-        additionalSorting:state.sortedPage.additionalSorting
+        additionalSorting:state.sortedPage.additionalSorting,
+        tvGenres:state.config.tvGenres,
+        movieGenres:state.config.movieGenres
     }
 }
 
@@ -83,7 +91,8 @@ const connector = connect(mapStateToProps,
     {
         fetchMoreMoviesThunk,
         setSortedMoviesThunk,
-        setAdditionalSortingAC
+        setAdditionalSortingAC,
+        setGenreSortingAC
     })
 
 type ReduxProps = ConnectedProps<typeof connector>

@@ -20,24 +20,25 @@ const SmallMovieCard: FC<smallMovieCard> = ({imageUrl, title, date, rating, id})
         setHighlighted(p => !p)
     }
     const titleStyle = highlighted ? styles.highlighted_title : styles.title;
+
     return (
-            <div className={styles.card_wrapper}>
-                <div className={styles.more_btn}>
-                    <MoreButton id={id}/>
-                </div>
-                <NavLink to={`/movies/${id}`}>
-                    <img className={styles.card_img} src={imageUrl}/>
-                </NavLink>
-                <div onMouseEnter={highlightToggle} onMouseLeave={highlightToggle} className={titleStyle}>
-                    <NavLink to={`/movies/${id}`}>
-                        {title}
-                    </NavLink>
-                </div>
-                <span className={styles.date}>{date}</span>
-                <div className={styles.popularity}>
-                    <PercentageBar rating={rating} size={34}/>
-                </div>
+        <div className={styles.card_wrapper}>
+            <div className={styles.more_btn}>
+                <MoreButton id={id}/>
             </div>
+            <NavLink to={`/movies/${id}`}>
+                <img className={styles.card_img} src={imageUrl}/>
+            </NavLink>
+            <div onMouseEnter={highlightToggle} onMouseLeave={highlightToggle} className={titleStyle}>
+                <NavLink to={`/movies/${id}`}>
+                    {title}
+                </NavLink>
+            </div>
+            <span className={styles.date}>{date}</span>
+            <div className={styles.popularity}>
+                <PercentageBar rating={rating} size={34}/>
+            </div>
+        </div>
     );
 };
 
