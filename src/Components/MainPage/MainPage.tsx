@@ -2,6 +2,7 @@ import React, {FC} from 'react';
 import {MovieDetails, MovieListObject, TVDetails, TVListObject, videoListResultObject} from "../../Types/Types";
 import MoviesSection from "./MoviesSection/MoviesSection";
 import TrailersBar from "./MoviesSection/TrailersBar/TrailersBar";
+import SearchSection from './SearchSection/SearchSection';
 
 
 interface MainPageProps {
@@ -33,6 +34,7 @@ const MainPage: FC<MainPageProps> = (props) => {
 
     return (
         <div>
+            <SearchSection/>
             <MoviesSection data={popularData} title={'Популярные'} url={props.url}/>
             <MoviesSection data={trendingMovieData} title={'Тренды фильмов'} url={props.url}/>
             <TrailersBar data={props.trailers} title={'Последние трейлеры'}/>

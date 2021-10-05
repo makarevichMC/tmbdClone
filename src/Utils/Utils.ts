@@ -96,3 +96,9 @@ export const LabelToFilter = (label:labels,mediaType:mediaType):sortingType => {
             }
     }
 }
+export const divideStyleSizeBy = (size:string,divider:number):string =>{
+    const numValue = /\d+/.exec(size)![0]
+    const sign = /\D+/.exec(size)![0]
+    const result = (Number(numValue) /divider).toString() + sign
+    return result
+}
