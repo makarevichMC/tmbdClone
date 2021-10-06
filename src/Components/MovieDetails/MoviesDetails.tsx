@@ -1,8 +1,7 @@
 import React, {FC} from 'react';
 import BackgroundSection from "./BackgroundSection/BackgroundSection";
 import {Actor, CrewMember, MovieBarData, MovieDetails} from "../../Types/Types";
-// import { getColorFromURL } from 'color-thief-node';
-// import Color, {useColor} from 'color-thief-react';
+
 import {usePalette} from 'react-palette'
 import ActorsBar from "./ActorsBar/ActorsBar";
 import Recomendations from "./Recomendations/Recomendations";

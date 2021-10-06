@@ -49,8 +49,7 @@ const mapStateToProps = (state: RootState) => {
         posterPath:state.moviePage.movieDetails?.poster_path,
         actors:state.moviePage.actors,
         crew:state.moviePage.crew,
-        recomendations:state.moviePage.recomendations
-
+        recomendations:state.moviePage.recomendations,
     }
 }
 

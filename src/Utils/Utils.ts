@@ -102,3 +102,15 @@ export const divideStyleSizeBy = (size:string,divider:number):string =>{
     const result = (Number(numValue) /divider).toString() + sign
     return result
 }
+
+export const uniqueFunc = (arr: any[]) => {
+    if (arr.length===0) return null
+    let uniqueArr = [arr[0]]
+    for (let i = 1; i < arr.length; i++) {
+        if (uniqueArr.some(uniqueItem => {
+            return uniqueItem.id === arr[i].id
+        })) continue
+        uniqueArr.push(arr[i])
+    }
+    return uniqueArr
+}

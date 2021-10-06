@@ -57,14 +57,6 @@ export const configAPI = {
 }
 
 
-export const query = async () => {
-    try {
-        let response = await axiosInstance.get(`https://api.themoviedb.org/3/search/movie?api_key=${APIkey}&query=Сус`)
-        return response.data;
-    } catch (e: any) {
-        return e.response.data;
-    }
-}
 
 
 //AUTHORIZATION API
@@ -160,6 +152,9 @@ export const mainPageAPI = {
         const response = await axiosInstance.get<getMovies>(`discover/movie?api_key=${APIkey}&language=ru-RU&region=RU&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=2021-07-06&primary_release_date.lte=2021-09-06&with_watch_monetization_types=rent`);
         return response.data
     },
+    async getSearchData(queryString:string):Promise<any>{
+        const response = await axiosInstance.get<any>('');
+    }
 
 }
 
@@ -199,7 +194,11 @@ export const tvInfoAPI = {
     async getTVRecomendations(id: number): Promise<TVRecomendations> {
         const response = await axiosInstance.get<TVRecomendations>(`movie/${id}/recommendations?api_key=${APIkey}&language=ru-RU&page=1`);
         return response.data
-    }
+    },
+    async getActorsAndCrew(id: number): Promise<ActorsAndCrew> {
+        const response = await axiosInstance.get<ActorsAndCrew>(`tv/${id}/credits?api_key=${APIkey}&language=ru-RU`);
+        return response.data
+    },
 }
 
 //PERSON PAGE API
