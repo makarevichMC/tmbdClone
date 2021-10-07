@@ -1,4 +1,4 @@
-import {labels, mediaType} from '../Types/Types';
+import {labels, mediaType, MovieDetails, TVDetails} from '../Types/Types';
 import {getSortedMediaArg} from '../API/api';
 import {initialSorting, sortingType} from '../redux/reducers/SortedMoviesPageReducer';
 
@@ -113,4 +113,170 @@ export const uniqueFunc = (arr: any[]) => {
         uniqueArr.push(arr[i])
     }
     return uniqueArr
+}
+
+export type TVandMovieDetails = {
+    backdrop_path:string|null
+    genres:string[]
+    raiting:number
+    runtime:string | null
+    belongs_to_collection: null | object
+    id: number
+    original_language: string
+    original_title: string
+    overview: string | null
+    popularity: number
+    poster_path: string | null
+    release_date: string
+    status: string
+    tagline: string | null
+    title: string
+    video?: boolean
+    vote_count: number
+    name?: string //4
+    first_air_date?: string //12
+
+}
+
+export interface TVDetailsgsfdg {
+    backdrop_path: string | null //
+    episode_run_time: number[]//-----------------
+    first_air_date: string//
+    genres: [//
+        {
+            id: number
+            name: string
+        }
+    ]
+    id: number
+    in_production: boolean //-----------------
+    last_air_date: string//-------------------
+    last_episode_to_air: { //-----------------
+        air_date: string
+        episode_number: number
+        id: number
+        name: string
+        overview: string
+        production_code: string
+        season_number: number
+        still_path: string | null
+        vote_average: number
+        vote_count: number
+    }
+    name: string//
+    number_of_episodes: number//-------------
+    number_of_seasons: number//----------------
+    original_language: string//
+    original_name: string//
+    overview: string//
+    popularity: number//
+    poster_path: string | null//
+    seasons: [
+        {
+            air_date: string
+            episode_count: number
+            id: number
+            name: string
+            overview: string
+            poster_path: string
+            season_number: number
+        }
+    ]
+    status: string
+    tagline: string//
+    vote_average: number//
+    vote_count: number//
+
+
+}
+
+export const convertMovieDetailsType = (movie:MovieDetails):TVandMovieDetails=>{
+    let detailsType = {} as TVandMovieDetails
+
+    let genres = movie?.genres.map(el => { //DONE
+        return el.name
+    });
+    let runtime;
+    let rating = movie?.vote_average || 0; //DONE
+    if (movie?.runtime) {
+        let hours: number | null = Math.floor(movie.runtime / 60);
+        let minutes = movie.runtime - hours * 60;
+        if (hours < 1) hours = null;
+        else {
+            minutes = movie.runtime - hours * 60;
+        }
+        runtime = hours ? `${hours}h ${minutes}m` : `${minutes}m` //DONE
+    }else{
+        runtime = null
+    }
+
+    detailsType.genres = genres
+    detailsType.runtime=runtime
+    detailsType.raiting = rating
+    detailsType.backdrop_path = movie.backdrop_path
+    detailsType.genres = genres
+    detailsType.runtime=runtime
+    detailsType.raiting = rating
+    detailsType.backdrop_path = movie.backdrop_path
+    detailsType.belongs_to_collection = movie.belongs_to_collection
+    detailsType.id = movie.id
+    detailsType.original_language = movie.original_language
+    detailsType.original_title = movie.original_title
+    detailsType.overview = movie.overview
+    detailsType.popularity = movie.popularity
+    detailsType.poster_path = movie.poster_path
+    detailsType.release_date = movie.release_date
+    detailsType.status = movie.status
+    detailsType.tagline = movie.tagline
+    detailsType.title = movie.title
+    detailsType.video = movie.video
+    detailsType.vote_count = movie.vote_count
+
+    return detailsType
+}
+
+export const convertTVDetailsType = (tv:TVDetails):TVandMovieDetails=>{
+    let detailsType = {} as TVandMovieDetails
+
+    let genres = tv?.genres.map(el => {
+        return el.name
+    });
+    let runtime;
+    let rating = tv?.vote_average || 0;
+    if (tv.episode_run_time.length>0) {
+        runtime = Math.ceil(tv.episode_run_time.
+        reduce((el1,el2)=>el1+el2,0)/tv.episode_run_time.length)
+
+        let hours: number | null = Math.floor( runtime / 60);
+        let minutes = runtime - hours * 60;
+        if (hours < 1) hours = null;
+        else {
+            minutes = runtime - hours * 60;
+        }
+        runtime = hours ? `${hours}h ${minutes}m` : `${minutes}m`
+    }else{
+        runtime = null
+    }
+
+    detailsType.genres = genres
+    detailsType.runtime=runtime
+    detailsType.raiting = rating
+    detailsType.backdrop_path = tv.backdrop_path
+    detailsType.genres = genres
+    detailsType.runtime=runtime
+    detailsType.raiting = rating
+    detailsType.backdrop_path = tv.backdrop_path
+    detailsType.id = tv.id
+    detailsType.original_language = tv.original_language
+    detailsType.original_title = tv.original_name
+    detailsType.overview = tv.overview
+    detailsType.popularity = tv.popularity
+    detailsType.poster_path = tv.poster_path
+    detailsType.release_date = tv.first_air_date
+    detailsType.status = tv.status
+    detailsType.tagline = tv.tagline
+    detailsType.title = tv.name
+    detailsType.vote_count = tv.vote_count
+
+    return detailsType
 }

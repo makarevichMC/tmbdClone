@@ -4,20 +4,29 @@ import {connect, ConnectedProps} from 'react-redux';
 import {setMoviePageThunk} from '../../redux/reducers/moviePageReducer';
 import MoviesDetails from './MoviesDetails';
 import {useParams} from 'react-router-dom';
+import {mediaType} from "../../Types/Types";
 
 type MoviesDetailsParams = {
     id: string
+    mediaType:'movie'|'tv'
 }
 
 
 const MovieDetailsContainer: FC<ReduxProps> = (props) => {
 
     const params = useParams<MoviesDetailsParams>();
+
     useEffect(()=>{
-        console.log(Number(params.id))
         if (!isNaN(Number(params.id))){
-            props.setMoviePageThunk(params.id);
+            switch (params.mediaType) {
+                case "movie":
+                    props.setMoviePageThunk(params.id);
+                case "tv":
+                    console.log('TV_DETAILS')
+                    props.setMoviePageThunk(params.id,true);
+            }
         }
+
     },[params.id])
 
     return (

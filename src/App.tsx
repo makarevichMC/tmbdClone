@@ -28,7 +28,8 @@ const App:FC<appProps> = ({setConfig}) => {
                     <Route exact path={'/movies'} component={() => <div> movies </div>}/>
                     <Route exact path={'/movies/option/:option'} component={SortedMoviesPageContainer}/>
                     <Route exact path={'/tv/option/:option'} component={SortedMoviesPageContainer}/>
-                    <Route exact path={'/movies/:id'} component={MovieDetailsContainer}/>
+                    <Route exact path={'/tv_details/:mediaType/:id'} component={MovieDetailsContainer}/>
+                    <Route exact path={'/movie_details/:mediaType/:id'} component={MovieDetailsContainer}/>
                 </div>
         </BrowserRouter>
     );

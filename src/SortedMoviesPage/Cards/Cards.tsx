@@ -23,12 +23,12 @@ const Cards: FC<CardsProps> = (props) => {
                         el.poster_path ?
                         props.baseUrl + el.poster_path :
                         noImage
-
+                const type = el.name ? 'TV' : 'MOVIE'
                 //@ts-ignore
                 return <div className={styles.item} key={el.id}>
                     <SmallMovieCard
                         date={el.release_date || el.first_air_date} id={el.id} title={el.title || el.name}
-                        imageUrl={url} rating={el.vote_average * 10}
+                        imageUrl={url} rating={el.vote_average * 10} type={type}
                     />
                 </div>
             })}

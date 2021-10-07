@@ -192,7 +192,7 @@ export const tvInfoAPI = {
         return response.data
     },
     async getTVRecomendations(id: number): Promise<TVRecomendations> {
-        const response = await axiosInstance.get<TVRecomendations>(`movie/${id}/recommendations?api_key=${APIkey}&language=ru-RU&page=1`);
+        const response = await axiosInstance.get<TVRecomendations>(`tv/${id}/recommendations?api_key=${APIkey}&language=ru-RU&page=1`);
         return response.data
     },
     async getActorsAndCrew(id: number): Promise<ActorsAndCrew> {

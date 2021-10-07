@@ -20,9 +20,10 @@ const MoviesBar: FC<MovieContainerProps> = ({data, imgBaseUrl}) => {
 
     if (uniqueData) {
         cards = uniqueData.map(el => {
+            const type = el.name ? 'TV' : 'MOVIE'
+            const title = el.title || el.name
+            const date = el.release_date || el.first_air_date
 
-            const title = el.title || el.name;
-            const date = el.release_date || el.first_air_date;
             return (
                 <div className={styles.card_item} key={el.id}>
                     <SmallMovieCard
@@ -31,6 +32,7 @@ const MoviesBar: FC<MovieContainerProps> = ({data, imgBaseUrl}) => {
                         date={date}
                         rating={el.vote_average * 10}
                         id={el.id}
+                        type={type}
                     />
                 </div>)
         })

@@ -1,17 +1,18 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect} from 'react';
 import BackgroundSection from "./BackgroundSection/BackgroundSection";
 import {Actor, CrewMember, MovieBarData, MovieDetails} from "../../Types/Types";
 
 import {usePalette} from 'react-palette'
 import ActorsBar from "./ActorsBar/ActorsBar";
 import Recomendations from "./Recomendations/Recomendations";
+import {TVandMovieDetails} from "../../Utils/Utils";
 
 
 type MoviesDetailsProps = {
     baseProfileUrl: string
     baseBackdropUrl: string
     backDropUrl?: string | null
-    movieDetails: MovieDetails | null
+    movieDetails: TVandMovieDetails | null
     mainImageUrl: string
     posterPath?: string | null
     actors: Actor[]
@@ -26,30 +27,18 @@ const MoviesDetails: FC<MoviesDetailsProps> = (props) => {
     let posterUrl = props.mainImageUrl + props.posterPath;
 
 
-    console.log(props.baseBackdropUrl, props.posterPath) // undefined undefined PRELOADER
+    // console.log(props.baseBackdropUrl, props.posterPath) // undefined undefined PRELOADER
 
-    const {data, loading} = usePalette(posterUrl);
+    const {data, loading} = usePalette(posterUrl)
 
-
-    let details = props.movieDetails;
-    let genres = details?.genres.map(el => {
-        return el.name
-    });
-    let runtime;
-    let rating = details?.vote_average || 0;
-    if (details?.runtime) {
-        let hours: number | null = Math.floor(details.runtime / 60);
-        let minutes = details.runtime - hours * 60;
-        if (hours < 1) hours = null;
-        else {
-            minutes = details.runtime - hours * 60;
-        }
-        runtime = hours ? `${hours}h ${minutes}m` : `${minutes}m`
-    }
+    let details = props.movieDetails
+    let genres = details?.genres ? details.genres : []
+    let runtime = details?.runtime ? details.runtime : ''
+    let rating = details?.raiting ? details.raiting : 0
 
     return (
+        props.movieDetails ?
         <div>
-
             <BackgroundSection posterUrl={posterUrl} backgorundURL={backgroundURL} rating={rating}
                                title={details?.title} release_date={details?.release_date}
                                genres={genres} overview={details?.overview}
@@ -63,6 +52,8 @@ const MoviesDetails: FC<MoviesDetailsProps> = (props) => {
 
             <Recomendations baseUrl={props.mainImageUrl} recomendationsData={props.recomendations}/>
         </div>
+            :
+            <div>LOADING....</div>
     );
 };
 

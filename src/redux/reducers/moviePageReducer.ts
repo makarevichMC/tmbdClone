@@ -1,11 +1,11 @@
 import {Action, Actor, CrewMember, MovieBarData, MovieDetails, MovieListObject, TVDetails} from '../../Types/Types';
 import {Dispatch} from "redux";
 import {movieInfoAPI, tvInfoAPI} from "../../API/api";
-import {deepEqual} from "../../Utils/Utils";
+import {convertMovieDetailsType, convertTVDetailsType, deepEqual, TVandMovieDetails} from "../../Utils/Utils";
 
 
 export interface moviePageState {
-    movieDetails: MovieDetails | null
+    movieDetails: TVandMovieDetails | null
     actors: Actor[]
     crew: CrewMember[]
     recomendations: MovieBarData[]
@@ -25,18 +25,18 @@ export enum moviePageActions {
     SET_ACTORS = 'SET_ACTORS',
     SET_CREW = 'SET_CREW',
     SET_RECOMENDATIONS = 'SET_RECOMENDATIONS',
-    SET_TV_DETAILS = 'SET_TV_DETAILS',
+    // SET_TV_DETAILS = 'SET_TV_DETAILS',
 }
-export type setTVDetailsAction = {
-    type: moviePageActions.SET_TV_DETAILS,
-    payload: {
-        details: TVDetails
-    }
-}
+// export type setTVDetailsAction = {
+//     type: moviePageActions.SET_TV_DETAILS,
+//     payload: {
+//         details: TVDetails
+//     }
+// }
 export type setMovieDetailsAction = {
     type: moviePageActions.SET_MOVIE_DETAILS,
     payload: {
-        details: MovieDetails
+        details: TVandMovieDetails
     }
 }
 export type setActorsAction = {
@@ -58,12 +58,12 @@ export type setRecomendationsAction = {
     }
 }
 
-const setTVDetailsAC = (details: TVDetails): setTVDetailsAction => ({
-    type: moviePageActions.SET_TV_DETAILS,
-    payload: {details}
-})
+// const setTVDetailsAC = (details: TVDetails): setTVDetailsAction => ({
+//     type: moviePageActions.SET_TV_DETAILS,
+//     payload: {details}
+// })
 
-const setMovieDetailsAC = (details: MovieDetails): setMovieDetailsAction => ({
+const setMovieDetailsAC = (details: TVandMovieDetails): setMovieDetailsAction => ({
     type: moviePageActions.SET_MOVIE_DETAILS,
     payload: {details}
 })
@@ -79,8 +79,7 @@ type moviePageAction =
     setMovieDetailsAction |
     setActorsAction |
     setCrewAction |
-    setRecomendationsAction |
-    setTVDetailsAction
+    setRecomendationsAction
 
 
 
@@ -118,21 +117,22 @@ export const setMoviePageThunk = (id:string,tv:boolean = false) => async (dispat
     const innerId = Number(id);
 
     let results;
-
+    console.log(tv,tv,tv,tv)
     if (tv){
         results = await Promise.all([
             tvInfoAPI.getTVDetails(innerId),
             tvInfoAPI.getActorsAndCrew(innerId),
             tvInfoAPI.getTVRecomendations(innerId)
         ]);
-        dispatch(setTVDetailsAC(results[0]));
+        dispatch(setMovieDetailsAC(convertTVDetailsType(results[0])));
+        console.log('RESULTS',results,)
     } else {
         results = await Promise.all([
             movieInfoAPI.getMovieDetails(innerId),
             movieInfoAPI.getActorsAndCrew(innerId),
             movieInfoAPI.getMovieRecomendations(innerId)
         ]);
-        dispatch(setMovieDetailsAC(results[0]));
+        dispatch(setMovieDetailsAC(convertMovieDetailsType(results[0])));
     }
 
 
