@@ -138,57 +138,6 @@ export type TVandMovieDetails = {
 
 }
 
-export interface TVDetailsgsfdg {
-    backdrop_path: string | null //
-    episode_run_time: number[]//-----------------
-    first_air_date: string//
-    genres: [//
-        {
-            id: number
-            name: string
-        }
-    ]
-    id: number
-    in_production: boolean //-----------------
-    last_air_date: string//-------------------
-    last_episode_to_air: { //-----------------
-        air_date: string
-        episode_number: number
-        id: number
-        name: string
-        overview: string
-        production_code: string
-        season_number: number
-        still_path: string | null
-        vote_average: number
-        vote_count: number
-    }
-    name: string//
-    number_of_episodes: number//-------------
-    number_of_seasons: number//----------------
-    original_language: string//
-    original_name: string//
-    overview: string//
-    popularity: number//
-    poster_path: string | null//
-    seasons: [
-        {
-            air_date: string
-            episode_count: number
-            id: number
-            name: string
-            overview: string
-            poster_path: string
-            season_number: number
-        }
-    ]
-    status: string
-    tagline: string//
-    vote_average: number//
-    vote_count: number//
-
-
-}
 
 export const convertMovieDetailsType = (movie:MovieDetails):TVandMovieDetails=>{
     let detailsType = {} as TVandMovieDetails
@@ -279,4 +228,22 @@ export const convertTVDetailsType = (tv:TVDetails):TVandMovieDetails=>{
     detailsType.vote_count = tv.vote_count
 
     return detailsType
+}
+
+export const backgroundUrls =
+    ['34OGjFEbHj0E3lE2w0iTUVq0CBz.jpg,hreiLoPysWG79TsyQgMzFKaOTF5.jpg,uozb2VeD87YmhoUP1RrGWfzuCrr.jpg',
+        '5GISMqlRXMEyBrgEqyvhaMMuQmJ.jpg','bcT8CaBIj086WVD7K529h78eujb.jpg','6LfVuZBiOOCtqch5Ukspjb9y0EB.jpg',
+        'zqkmTXzjkAgXmEWLRsY4UpTWCeo.jpg','qJxzjUjCpTPvDHldNnlbRC4OqEh.jpg','iDbIEpCM9nhoayUDTwqFL1iVwzb.jpg',
+        'r2NcIZ1FPMlxCty3vRITVTgGNVS.jpg','kf456ZqeC45XTvo6W9pW5clYKfQ.jpg','8bcoRX3hQRHufLPSDREdvr3YMXx.jpg',
+        'tlEFuIlaxRPXIYVHXbOSAMCfWqk.jpg','hPea3Qy5Gd6z4kJLUruBbwAH8Rm.jpg','kSNojkWwSZWsYv0Xj1gcq88okzY.jpg',
+        '/jTiQAusGG4dVLSb1WHme9I9R4NN.jpg']
+
+
+export const pickRandomFromArray = <T extends unknown>(arr:Array<T>,exceptFor?:T):T => {
+    let array = [...arr]
+    if (exceptFor!== undefined){
+        array = array.filter(el=>el!==exceptFor)
+    }
+    let index = Math.floor(Math.random()*array.length)
+    return array[index]
 }

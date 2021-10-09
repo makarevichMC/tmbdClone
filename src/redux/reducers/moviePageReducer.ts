@@ -117,7 +117,7 @@ export const setMoviePageThunk = (id:string,tv:boolean = false) => async (dispat
     const innerId = Number(id);
 
     let results;
-    console.log(tv,tv,tv,tv)
+
     if (tv){
         results = await Promise.all([
             tvInfoAPI.getTVDetails(innerId),
@@ -125,7 +125,7 @@ export const setMoviePageThunk = (id:string,tv:boolean = false) => async (dispat
             tvInfoAPI.getTVRecomendations(innerId)
         ]);
         dispatch(setMovieDetailsAC(convertTVDetailsType(results[0])));
-        console.log('RESULTS',results,)
+
     } else {
         results = await Promise.all([
             movieInfoAPI.getMovieDetails(innerId),

@@ -6,6 +6,7 @@ import MoreButton from "../../../MoreButton/MoreButton";
 import {mediaType} from "../../../../../Types/Types";
 
 
+
 interface smallMovieCard {
     imageUrl: string
     title: string | undefined
@@ -22,11 +23,12 @@ const SmallMovieCard: FC<smallMovieCard> = ({imageUrl, title, date, rating, id,t
         setHighlighted(p => !p)
     }
     const titleStyle = highlighted ? styles.highlighted_title : styles.title
-    let url;
+    let url:string;
     const parameter = type.toLowerCase()
     switch (type) {
         case "MOVIE":
             url = `/movie_details/${parameter}/${id}`
+            break
         case "TV":
             url = `/tv_details/${parameter}/${id}`
     }

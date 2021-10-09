@@ -6,8 +6,6 @@ import {MovieBarData, MovieDetails, TVDetails} from '../../../Types/Types';
 import SwitchBar from './SwitchBar/SwitchBar';
 
 
-
-
 interface Props {
     data:{
             labels:string[]

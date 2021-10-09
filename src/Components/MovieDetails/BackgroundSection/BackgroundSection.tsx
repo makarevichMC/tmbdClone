@@ -36,7 +36,7 @@ const BackgroundSection: FC<BackdroundSectionProps> = (props) => {
     return (
         <div className={styles.wrapper}
              style={{
-                 backgroundImage:`url(${props.backgorundURL})`,
+                 background:`url(${props.backgorundURL}) center`,
              }}>
             <div className={styles.background}
             style={{

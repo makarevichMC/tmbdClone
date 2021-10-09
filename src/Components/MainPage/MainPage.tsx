@@ -3,6 +3,7 @@ import {MovieDetails, MovieListObject, TVDetails, TVListObject, videoListResultO
 import MoviesSection from "./MoviesSection/MoviesSection";
 import TrailersBar from "./MoviesSection/TrailersBar/TrailersBar";
 import SearchSection from './SearchSection/SearchSection';
+import {backgroundUrls} from '../../Utils/Utils';
 
 
 interface MainPageProps {
@@ -34,7 +35,7 @@ const MainPage: FC<MainPageProps> = (props) => {
 
     return (
         <div>
-            <SearchSection/>
+            <SearchSection urls={backgroundUrls}/>
             <MoviesSection data={popularData} title={'Популярные'} url={props.url}/>
             <MoviesSection data={trendingMovieData} title={'Тренды фильмов'} url={props.url}/>
             <TrailersBar data={props.trailers} title={'Последние трейлеры'}/>

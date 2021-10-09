@@ -14,7 +14,7 @@ type RecomendationCardProps = {
 }
 
 const RecomendationCard: FC<RecomendationCardProps> = ({title, rating, date, imgUrl, id, tv}) => {
-    const redirectURL = tv ? `/tv/${id}` : `/movies/${id}`;
+    const redirectURL = tv ? `tv_details/tv/${id}` : `/movie_details/movie/${id}`;
 
     const [isActive, setIsActive] = useState(false);
     const [showTitle, setShowTitle] = useState(false);
