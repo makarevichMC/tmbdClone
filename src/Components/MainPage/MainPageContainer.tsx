@@ -3,6 +3,7 @@ import {RootState} from "../../redux/store";
 import {connect, ConnectedProps} from "react-redux";
 import MainPage from "./MainPage";
 import {SetMainPageThunk, SetTrailersThunk} from "../../redux/reducers/mainPageReducer";
+import {SetQueryAC} from '../../redux/reducers/searchPageReducer';
 
 
 const MainPageContainer:FC<ReduxProps> = (props) => {
@@ -14,7 +15,7 @@ const MainPageContainer:FC<ReduxProps> = (props) => {
 
     return (
         <MainPage
-            url={props.url}
+            url={props.url} setQuery = {props.SetQueryAC }
             dayTrendMovie={props.dayTrendingMovies}
             weekTrendMovie={props.weekTrendingMovies}
             weekTrendTV={props.weekTrendingTV}
@@ -37,12 +38,13 @@ const mapStateToProps = (state:RootState) => {
         weekTrendingMovies:state.mainPage.trendingBarWeek.movies,
         popularTVs:state.mainPage.popularBar.tv,
         popularMovies:state.mainPage.popularBar.movies,
-        trailers:state.mainPage.trailerBar
+        trailers:state.mainPage.trailerBar,
+
     }
 }
 
 
-const connector = connect(mapStateToProps,{SetMainPageThunk,SetTrailersThunk});
+const connector = connect(mapStateToProps,{SetMainPageThunk,SetTrailersThunk,SetQueryAC});
 type ReduxProps = ConnectedProps<typeof connector>;
 
 export default  connector(MainPageContainer) ;

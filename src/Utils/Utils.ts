@@ -19,18 +19,24 @@ export   const hexToRGB = (hex: Array<string>, alpha: number) => {
 }
 
 export const deepEqual = (x:any,y:any) => {
+
     if (x===y)  return true
 
     if (typeof x !== 'object' || typeof y !== 'object' || x===null||y ===null) return false
+
+    if (Object.keys(x).length != Object.keys(y).length) return false
 
     for (let prop in x){
         if (x[prop]===y[prop]) continue
         if (typeof x !== 'object' || typeof y !== 'object' || x===null||y ===null) return false
         else if (deepEqual(x[prop],y[prop])) continue
-        else return false
+        return false
     }
+
+
     return true
 }
+
 
 export const convertMediaType = (type:mediaType,dataType:initialSorting):getSortedMediaArg => {
 

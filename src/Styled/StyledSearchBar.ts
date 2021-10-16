@@ -7,6 +7,8 @@ type styledProps = {
     position?:string
     left?:string
     top?:string
+    paddingLeft?:string
+    color?:string
 }
 
 export const StyledSearchBar = styled.input<styledProps>`
@@ -16,7 +18,11 @@ export const StyledSearchBar = styled.input<styledProps>`
     height: ${props => props.height};
     border-radius:${props => divideStyleSizeBy(props.height,2)};
     border-style:none;
-    padding-left:${props => divideStyleSizeBy(props.width,20)};
+    padding-left:${props => {
+        if (props.paddingLeft) return props.paddingLeft
+        return  divideStyleSizeBy(props.width, 20)
+}}; 
+    color:${props=>props.color};
     font-size:20px;
     &:focus::placeholder { 
     color: transparent;

@@ -13,9 +13,9 @@ const PercentageBar: FC<PercentageProps> = ({rating, size}) => {
         position: 'absolute',
         fontSize: `${size * 0.2}px`,
         left: `${size * 0.4}px`,
-        color: '#fff',
+        color: '#E5E7E8',
         top: 0,
-        fontFamily: 'Source Sans Pro',
+        fontFamily: 'Consolas',
 
     }
 
@@ -31,7 +31,7 @@ const PercentageBar: FC<PercentageProps> = ({rating, size}) => {
         left: `${size * 0.25}px`,
         color: '#fff',
         top: `${size * 0.25}px`,
-        fontFamily: 'Source Sans Pro',
+        fontFamily: 'Consolas',
     }
 
     useEffect(() => {
@@ -42,14 +42,14 @@ const PercentageBar: FC<PercentageProps> = ({rating, size}) => {
         let secondaryColor;
 
         if (rating > 69) {
-            primaryColor = '#14cf15';
-            secondaryColor = '#598c51';
+            primaryColor = '#21D07A';
+            secondaryColor = '#204529';
         } else if (rating < 40) {
-            primaryColor = '#f00f39';
-            secondaryColor = '#8f5a66';
+            primaryColor = '#DA2360';
+            secondaryColor = '#561435';
         } else {
-            primaryColor = '#e7d018';
-            secondaryColor = '#aea55f';
+            primaryColor = '#D2D531';
+            secondaryColor = '#423D0F';
         }
 
 

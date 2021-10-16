@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosResponse, CancelTokenSource} from 'axios';
 import {
     ActorsAndCrew,
     Config,
@@ -152,10 +152,6 @@ export const mainPageAPI = {
         const response = await axiosInstance.get<getMovies>(`discover/movie?api_key=${APIkey}&language=ru-RU&region=RU&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&primary_release_date.gte=2021-07-06&primary_release_date.lte=2021-09-06&with_watch_monetization_types=rent`);
         return response.data
     },
-    async getSearchData(queryString:string):Promise<any>{
-        const response = await axiosInstance.get<any>('');
-    }
-
 }
 
 //MOVIE INFO API
@@ -380,3 +376,68 @@ export const sortedPageAPI = {
 
 }
 
+
+export type movieQueryResult = {
+    title?:string
+    original_title:string
+    media_type:'movie'
+    id:number
+    poster_path : string | null
+    overview:string
+    release_date:string
+}
+export type tvQueryResult = {
+    original_name:string
+    name?:string
+    media_type:'tv'
+    id:number
+    poster_path : string | null
+    overview:string
+    first_air_date:string
+}
+export type personQueryResult = {
+    name:string
+    media_type:'person'
+    id:number
+    profile_path : string | null
+    known_for_department: string
+}
+
+export type queryResult = movieQueryResult | tvQueryResult | personQueryResult
+
+
+
+type queryResponse<T> = {
+    page: number
+    results:T[]
+    total_results:number
+    total_pages:number
+}
+
+
+
+
+type Conditional<T> = T extends 'movie' ?  queryResponse<movieQueryResult> : (T extends 'tv' ? queryResponse<tvQueryResult>:queryResponse<personQueryResult>)
+
+export const searchPageAPI = {
+    tokens:{
+        searchDataToken: null as CancelTokenSource | null
+    },
+
+    async getSearchData<T>(queryString:string,page:number,type:T):Promise<Conditional<T>>{
+
+        if (this.tokens.searchDataToken) {
+                this.tokens.searchDataToken.cancel('getSearchData request canceled')
+            }
+
+            this.tokens.searchDataToken  = axios.CancelToken.source()
+
+            const response = await axiosInstance.get<Conditional<typeof type>>
+
+            (`search/${type}?api_key=${APIkey}&query=${queryString}&language=ru-RU&page=${page}&include_adult=false`,
+                {cancelToken:this.tokens.searchDataToken.token})
+
+            return response.data
+    },
+
+}

@@ -9,15 +9,26 @@ type StyledPositionProps = {
     height?: string
     right?: string
     marginLeft?: string
+    center?:boolean
+    zIndex?:number
 }
 
 export const StyledPosition = styled.div<StyledPositionProps>`
   position: ${props => props.position};
   top:${props => props.top};
-  left:${props => props.left};
+  left:${props => {
+      if (props.center) {
+          return '50%'
+      }
+    return  props.left
+}};
   right:${props => props.right};
   width: ${props => props.width};
   height: ${props => props.height};
   background-color: ${props => props.background};
   margin-left: ${props => props.marginLeft}; 
+  transform: ${p=>{
+      if (p.center) return 'translate(-50%, 0)'
+}};
+  z-index: ${p => p.zIndex};
 `

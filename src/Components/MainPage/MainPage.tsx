@@ -15,6 +15,7 @@ interface MainPageProps {
     popularMovies: MovieListObject[],
     url: string,
     trailers:videoListResultObject[]
+    setQuery:(query:string)=>any
 }
 
 const MainPage: FC<MainPageProps> = (props) => {
@@ -35,7 +36,7 @@ const MainPage: FC<MainPageProps> = (props) => {
 
     return (
         <div>
-            <SearchSection urls={backgroundUrls}/>
+            <SearchSection setQuery={props.setQuery} urls={backgroundUrls}/>
             <MoviesSection data={popularData} title={'Популярные'} url={props.url}/>
             <MoviesSection data={trendingMovieData} title={'Тренды фильмов'} url={props.url}/>
             <TrailersBar data={props.trailers} title={'Последние трейлеры'}/>
