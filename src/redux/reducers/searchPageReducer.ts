@@ -3,6 +3,7 @@ import {Action} from '../../Types/Types';
 import {movieQueryResult, personQueryResult, searchPageAPI, tvQueryResult} from '../../API/api';
 import {deepEqual} from '../../Utils/Utils';
 import {GeneralQueryResultData} from '../../Components/SearchPage/QueryResults/QueryResultBar/QueryResultBar';
+import {RootState} from '../store';
 
 const initialState = {
     query: null as string | null,
@@ -11,7 +12,11 @@ const initialState = {
     tvResponse: [] as tvQueryResult[] ,
     personResponse: [] as personQueryResult[] ,
     currentPageNumber:null as number | null,
-    pagesCount:null as number | null,
+    pagesCount:{
+        movies:0 ,
+        tvs:0 ,
+        people: 0
+    },
     resultsCount:{
         movies:0 ,
         tvs:0 ,
@@ -69,7 +74,11 @@ type SetCurrentPageNumberAction = {
 type SetPagesCountAction = {
     type:SearchPageActions.SET_PAGES_COUNT,
     payload:{
-        pagesCount:number
+        pagesCount: {
+            movies:number,
+            tvs:number,
+            people: number
+        }
     }
 }
 
@@ -116,12 +125,18 @@ export const SetPersonQueryResponseAC = (personResponse:personQueryResult[]):Set
     }
 })
 
-export const SetPagesCountAC = (pagesCount:number):SetPagesCountAction => ({
+export const SetPagesCountAC = (movies:number,tvs:number,people:number):SetPagesCountAction => ({
     type:SearchPageActions.SET_PAGES_COUNT,
     payload:{
-        pagesCount
+        pagesCount:{
+            movies,
+            tvs,
+            people
+        }
     }
 })
+
+
 
 export const SetCurrentPageNumberAC = (currentPageNumber:number):SetCurrentPageNumberAction => ({
     type:SearchPageActions.SET_CURRENT_PAGE_NUMBER,
@@ -164,6 +179,7 @@ export const searchPageReducer = (state=initialState,action:SearchPageAction):ty
             case SearchPageActions.SET_PAGES_COUNT:
 
                 return {...state,pagesCount: action.payload.pagesCount}
+
             case SearchPageActions.SET_MOVIE_RESPONSE:
 
                 if (!deepEqual(action.payload.movieResponse,state.movieResponse)){
@@ -188,6 +204,7 @@ export const searchPageReducer = (state=initialState,action:SearchPageAction):ty
 
                 }
                 break
+
             case SearchPageActions.SET_CURRENT_RESULTS:
                 if (!deepEqual(action.payload.currentResults,state.currentResults)){
                     return {...state,currentResults: action.payload.currentResults}
@@ -197,15 +214,18 @@ export const searchPageReducer = (state=initialState,action:SearchPageAction):ty
     return state
 }
 
-export const setQueryResultsThunk = (query:string | null) => async (dispatch:Dispatch<Action>,getState:()=>typeof initialState) => {
+
+
+export const setQueryResultsThunk = (query:string | null,page:number) => async (dispatch:Dispatch<Action>,getState:()=>RootState) => {
 
     if (!query) return
 
-    const movies = await searchPageAPI.getSearchData<'movie'>(query, 1,'movie')
 
-    const tvs = await searchPageAPI.getSearchData<'tv'>(query,1,'tv')
+    const movies = await searchPageAPI.getSearchData<'movie'>(query, page,'movie')
 
-    const people = await searchPageAPI.getSearchData<'person'>(query,1,'person')
+    const tvs = await searchPageAPI.getSearchData<'tv'>(query,page,'tv')
+
+    const people = await searchPageAPI.getSearchData<'person'>(query,page,'person')
 
 
 
@@ -227,6 +247,10 @@ export const setQueryResultsThunk = (query:string | null) => async (dispatch:Dis
 
         dispatch(SetCurrentPageNumberAC(1))
 
-        dispatch(SetPagesCountAC(movies.total_pages))
+        dispatch(SetPagesCountAC(
+            movies.total_pages,
+            tvs.total_pages,
+            people.total_pages
+        ))
     }
 }

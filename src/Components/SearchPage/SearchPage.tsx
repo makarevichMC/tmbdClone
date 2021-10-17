@@ -13,14 +13,19 @@ import PageNumbers from './PageNumbers/PageNumbers';
 type Props = {
     data: GeneralQueryResultData[]
     queryString: string
-    setQueries: (query: string) => any
+    setQueries: (query: string,page:number) => any
     labelsWithCount: Array<{ label: string, count: number }>
     setCurrentPage: (results: GeneralQueryResultData[]) => {}
     movies: GeneralQueryResultData[]
     tvs: GeneralQueryResultData[]
     people: GeneralQueryResultData[]
-    pagesCount: number | null
+    pagesCount: {
+        movies:number,
+        tvs:number,
+        people:number
+    }
     currentPageNumber:number | null
+    setCurrentPageNumber:(page:number)=>void
 }
 
 type StyledSearchDiv = {
@@ -47,12 +52,25 @@ const StyledSearchContainer = styled.div`
 
 const SearchPage: FC<Props> = (props) => {
 
+    const [currentPagesCount,setCurrentPagesCount] = useState(props.pagesCount.movies)
+
     const [visible, setVisible] = useState(false)
 
     const [inputValue, setInputValue] = useState(props.queryString)
 
     const callbacks = [
-        () => props.setCurrentPage(props.movies), () => props.setCurrentPage(props.tvs), () => props.setCurrentPage(props.people)
+        () => {
+            props.setCurrentPage(props.movies)
+            setCurrentPagesCount(props.pagesCount.movies)
+        },
+        () => {
+            props.setCurrentPage(props.tvs)
+            setCurrentPagesCount(props.pagesCount.tvs)
+        },
+        () => {
+            props.setCurrentPage(props.people)
+            setCurrentPagesCount(props.pagesCount.people)
+        }
     ]
 
 
@@ -86,8 +104,9 @@ const SearchPage: FC<Props> = (props) => {
                     value={inputValue}
 
                     onChange={(e) => {
+                        let pageNumber = props.currentPageNumber ? props.currentPageNumber : 1
                         setInputValue(e.target.value)
-                        props.setQueries(e.target.value)
+                        props.setQueries(e.target.value,pageNumber)
                     }}
                     color={'rgb(195,195,195)'}
                 />
@@ -103,7 +122,17 @@ const SearchPage: FC<Props> = (props) => {
             </StyledSearchContainer>
 
             {(props.pagesCount && props.currentPageNumber) &&
-            <PageNumbers currentPage={props.currentPageNumber} totalPages={props.pagesCount} numbersToShow={6} callback={(n:number)=>{}}/>}
+
+            <PageNumbers
+                currentPage={props.currentPageNumber}
+                totalPages={currentPagesCount}
+                numbersToShow={7}
+                callback={(pageNumber)=>{
+                    props.setQueries(
+                        inputValue,
+                        pageNumber
+                    )
+                }}/>}
 
         </StyledPosition>
     );

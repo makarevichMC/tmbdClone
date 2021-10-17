@@ -2,7 +2,11 @@ import React, {FC, useEffect} from 'react';
 import {RootState} from '../../redux/store';
 import {connect, ConnectedProps} from 'react-redux';
 import SearchPage from './SearchPage';
-import {SetCurrentResultsAC, setQueryResultsThunk} from '../../redux/reducers/searchPageReducer';
+import {
+    SetCurrentPageNumberAC,
+    SetCurrentResultsAC,
+    setQueryResultsThunk
+} from '../../redux/reducers/searchPageReducer';
 import {
     getCurrentPage,
     getCurrentResults,
@@ -16,16 +20,19 @@ import {
 const SearchPageContainer:FC<reduxProps> = (props) => {
 
     useEffect(()=>{
-        props.setQueryResultsThunk(props.query)
+        props.setQueryResultsThunk(props.query,1)
         props.SetCurrentResultsAC(props.movieResults)
     },[props.movieResults])
+
         let res = props.currentResults ? props.currentResults : []
+
     return (
-        <SearchPage setQueries={(query:string)=>{props.setQueryResultsThunk(query)}}
+        <SearchPage setQueries={(query:string,pageNumber:number)=>{props.setQueryResultsThunk(query,pageNumber)}}
                     queryString={props.query} data={res} labelsWithCount={props.labelsWithCount}
                     setCurrentPage = {props.SetCurrentResultsAC} movies={props.movieResults}
                     tvs={props.tvResults} people={props.personResults} pagesCount={props.pagesCount}
-                    currentPageNumber = {props.currentPageNumber}
+                    currentPageNumber = {props.currentPageNumber} setCurrentPageNumber={props.SetCurrentPageNumberAC}
+
         />
     );
 };
@@ -44,7 +51,12 @@ const mapStateToProps = (state:RootState)=>{
     }
 }
 
-const connector = connect(mapStateToProps,{setQueryResultsThunk,SetCurrentResultsAC})
+const connector = connect(mapStateToProps,
+    {
+        setQueryResultsThunk,
+        SetCurrentResultsAC,
+        SetCurrentPageNumberAC,
+    })
 
 type reduxProps = ConnectedProps<typeof connector>
 
