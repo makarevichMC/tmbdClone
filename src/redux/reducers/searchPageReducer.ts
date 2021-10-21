@@ -4,10 +4,11 @@ import {movieQueryResult, personQueryResult, searchPageAPI, tvQueryResult} from 
 import {deepEqual} from '../../Utils/Utils';
 import {GeneralQueryResultData} from '../../Components/SearchPage/QueryResults/QueryResultBar/QueryResultBar';
 import {RootState} from '../store';
+import {getMovieResultsReselect, getPersonResultsReselect, getTvResultsReselect} from '../../Selectors/Selectors';
 
 const initialState = {
     query: null as string | null,
-    currentResults: [] as GeneralQueryResultData[],
+    currentResults: [] as GeneralQueryResultData[]|null,
     movieResponse: [] as movieQueryResult[] ,
     tvResponse: [] as tvQueryResult[] ,
     personResponse: [] as personQueryResult[] ,
@@ -21,7 +22,8 @@ const initialState = {
         movies:0 ,
         tvs:0 ,
         people: 0
-    }
+    },
+    currentType:null as null | 'tv' | 'movie' | 'person'
 }
 enum SearchPageActions  {
     SET_QUERY = 'SET_QUERY',
@@ -31,7 +33,15 @@ enum SearchPageActions  {
     SET_TV_RESPONSE = 'SET_TV_RESPONSE',
     SET_PERSON_RESPONSE = 'SET_PERSON_RESPONSE',
     SET_RESULTS_COUNT = 'SET_RESULTS_COUNT',
-    SET_CURRENT_RESULTS = 'SET_CURRENT_RESULTS'
+    SET_CURRENT_RESULTS = 'SET_CURRENT_RESULTS',
+    SET_CURRENT_TYPE='SET_CURRENT_TYPE'
+}
+
+type SetCurrentTypeAction = {
+    type:SearchPageActions.SET_CURRENT_TYPE,
+    payload:{
+        type:null | 'tv' | 'movie' | 'person'
+    }
 }
 
 type SetResultCountAction = {
@@ -91,9 +101,16 @@ type SetQueryAction = {
 type SetCurrentResultsAction = {
     type:SearchPageActions.SET_CURRENT_RESULTS,
     payload:{
-        currentResults:GeneralQueryResultData[]
+        currentResults:GeneralQueryResultData[] | null
     }
 }
+
+export const SetCurrentTypeAC = (type:null | 'tv' | 'movie' | 'person'):SetCurrentTypeAction =>({
+    type:SearchPageActions.SET_CURRENT_TYPE,
+    payload:{
+        type
+    }
+})
 
 const SetResultsCountAC = (movies:number,tvs:number,people:number):SetResultCountAction => ({
     type:SearchPageActions.SET_RESULTS_COUNT,
@@ -145,7 +162,7 @@ export const SetCurrentPageNumberAC = (currentPageNumber:number):SetCurrentPageN
     }
 })
 
-export const SetCurrentResultsAC = (currentResults:GeneralQueryResultData[] ):SetCurrentResultsAction => ({
+export const SetCurrentResultsAC = (currentResults:GeneralQueryResultData[]|null ):SetCurrentResultsAction => ({
     type:SearchPageActions.SET_CURRENT_RESULTS,
     payload:{
         currentResults
@@ -159,11 +176,14 @@ export const SetQueryAC = (query:string):SetQueryAction => ({
     }
 })
 
-type SearchPageAction = SetQueryAction | SetCurrentResultsAction|SetCurrentPageNumberAction| SetPagesCountAction
-|SetMovieResponseAction|SetTvResponseAction|SetPersonResponseAction | SetResultCountAction
+type SearchPageAction = SetQueryAction | SetCurrentResultsAction|SetCurrentPageNumberAction|
+    SetPagesCountAction |SetMovieResponseAction|SetTvResponseAction|
+    SetPersonResponseAction | SetResultCountAction | SetCurrentTypeAction
 
 export const searchPageReducer = (state=initialState,action:SearchPageAction):typeof initialState=>{
         switch (action.type) {
+            case SearchPageActions.SET_CURRENT_TYPE:
+                return {...state,currentType: action.payload.type}
             case SearchPageActions.SET_RESULTS_COUNT:
 
                 return {...state,resultsCount: action.payload.resultsCount}
@@ -206,6 +226,7 @@ export const searchPageReducer = (state=initialState,action:SearchPageAction):ty
                 break
 
             case SearchPageActions.SET_CURRENT_RESULTS:
+
                 if (!deepEqual(action.payload.currentResults,state.currentResults)){
                     return {...state,currentResults: action.payload.currentResults}
                 }
@@ -220,6 +241,7 @@ export const setQueryResultsThunk = (query:string | null,page:number) => async (
 
     if (!query) return
 
+    const type = getState().searchPage.currentType
 
     const movies = await searchPageAPI.getSearchData<'movie'>(query, page,'movie')
 
@@ -237,15 +259,33 @@ export const setQueryResultsThunk = (query:string | null,page:number) => async (
 
 
 
-    dispatch(SetResultsCountAC(
-        movies.total_results,
-        tvs.total_results,
-        people.total_results
-    ))
+    switch (type) {
+        case null:
+        case 'movie':
+            const movieResults = getMovieResultsReselect(getState())
+            dispatch(SetCurrentResultsAC(movieResults))
+
+            break
+        case 'tv':
+            const tvResults = getTvResultsReselect(getState())
+            dispatch(SetCurrentResultsAC(tvResults))
+            break
+        case 'person':
+            const personResults = getPersonResultsReselect(getState())
+            dispatch(SetCurrentResultsAC(personResults))
+            break
+    }
+
 
     if (movies.results.length !== 0){
 
-        dispatch(SetCurrentPageNumberAC(1))
+        dispatch(SetCurrentPageNumberAC(page))
+
+        dispatch(SetResultsCountAC(
+            movies.total_results,
+            tvs.total_results,
+            people.total_results
+        ))
 
         dispatch(SetPagesCountAC(
             movies.total_pages,
@@ -253,4 +293,6 @@ export const setQueryResultsThunk = (query:string | null,page:number) => async (
             people.total_pages
         ))
     }
+
+
 }

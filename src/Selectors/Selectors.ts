@@ -131,3 +131,7 @@ export const getPagesCount = (state:RootState) => {
 export const getCurrentPage = (state:RootState) => {
     return state.searchPage.currentPageNumber
 }
+
+export const getCurrentType = (state:RootState) =>{
+    return state.searchPage.currentType
+}

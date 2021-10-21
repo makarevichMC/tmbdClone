@@ -1,15 +1,15 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {RootState} from '../../redux/store';
 import {connect, ConnectedProps} from 'react-redux';
 import SearchPage from './SearchPage';
 import {
     SetCurrentPageNumberAC,
-    SetCurrentResultsAC,
+    SetCurrentResultsAC, SetCurrentTypeAC, SetQueryAC,
     setQueryResultsThunk
 } from '../../redux/reducers/searchPageReducer';
 import {
     getCurrentPage,
-    getCurrentResults,
+    getCurrentResults, getCurrentType,
     getLabelsWithCount,
     getMovieResultsReselect, getPagesCount,
     getPersonResultsReselect,
@@ -19,20 +19,26 @@ import {
 
 const SearchPageContainer:FC<reduxProps> = (props) => {
 
+
     useEffect(()=>{
-        props.setQueryResultsThunk(props.query,1)
-        props.SetCurrentResultsAC(props.movieResults)
-    },[props.movieResults])
+
+        const page = props.currentPageNumber ? props.currentPageNumber : 1
+
+        props.setQueryResultsThunk(props.query,page)
+
+
+    },[props.currentType,props.currentPageNumber])
 
         let res = props.currentResults ? props.currentResults : []
 
     return (
-        <SearchPage setQueries={(query:string,pageNumber:number)=>{props.setQueryResultsThunk(query,pageNumber)}}
+        <SearchPage setQueries={props.setQueryResultsThunk}
                     queryString={props.query} data={res} labelsWithCount={props.labelsWithCount}
                     setCurrentPage = {props.SetCurrentResultsAC} movies={props.movieResults}
                     tvs={props.tvResults} people={props.personResults} pagesCount={props.pagesCount}
                     currentPageNumber = {props.currentPageNumber} setCurrentPageNumber={props.SetCurrentPageNumberAC}
-
+                    setCurrentType={props.SetCurrentTypeAC} setQueryString={props.SetQueryAC}
+                    currentType = {props.currentType}
         />
     );
 };
@@ -47,7 +53,8 @@ const mapStateToProps = (state:RootState)=>{
         labelsWithCount:getLabelsWithCount(state),
         currentResults:getCurrentResults(state),
         pagesCount:getPagesCount(state),
-        currentPageNumber:getCurrentPage(state)
+        currentPageNumber:getCurrentPage(state),
+        currentType:getCurrentType(state)
     }
 }
 
@@ -56,6 +63,8 @@ const connector = connect(mapStateToProps,
         setQueryResultsThunk,
         SetCurrentResultsAC,
         SetCurrentPageNumberAC,
+        SetCurrentTypeAC,
+        SetQueryAC
     })
 
 type reduxProps = ConnectedProps<typeof connector>

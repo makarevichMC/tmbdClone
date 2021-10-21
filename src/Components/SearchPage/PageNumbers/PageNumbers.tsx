@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import styled from 'styled-components';
 
 type StyledPageButtonProps = {
@@ -28,9 +28,14 @@ type Props = {
 const PageNumbers:FC<Props> = ({totalPages,numbersToShow,callback,currentPage}) => {
 
 
+    const [pagesBtns,setPagesBtns] = useState<any[]>([])
+
+    useEffect(()=>{
+        setPagesBtns(createPageButtons())
+    },[totalPages,currentPage])
+
     const createPageButtons = () => {
         let pageButtons = []
-
         for (let i = 1; i<=totalPages; i++){
 
             if (i===currentPage) {
@@ -68,12 +73,12 @@ const PageNumbers:FC<Props> = ({totalPages,numbersToShow,callback,currentPage}) 
         if (currentPage + 3 > numbersToShow + 3 && currentPage < totalPages - numbersToShow){
             firstPart = [...pageButtons.slice(0,2),'...']
             middlePart = [...pageButtons.slice(currentPage-3,currentPage+3)]
-            secondPart = ['...',...pageButtons.slice(pageButtons.length-2,pageButtons.length)]
+            secondPart = [,...pageButtons.slice(pageButtons.length-2,pageButtons.length)]
         }
 
         if (currentPage + 3 > numbersToShow + 3 && currentPage >= totalPages - numbersToShow){
 
-            firstPart = [...pageButtons.slice(0,2),'...']
+            firstPart = [...pageButtons.slice(0,2),]
             secondPart = ['...',...pageButtons.slice(pageButtons.length-numbersToShow - 3)]
         }
 
@@ -95,14 +100,13 @@ const PageNumbers:FC<Props> = ({totalPages,numbersToShow,callback,currentPage}) 
                               }}
             >Следующий</StyledPageButton>
         )
+
         return pageButtons
     }
 
-   const pageButtons = createPageButtons()
-
     return (
         <div>
-            {pageButtons}
+            {pagesBtns}
         </div>
     );
 };

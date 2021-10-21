@@ -8,24 +8,29 @@ import ResultCards from './ResultCards/ResultCards';
 import SearchResultsTable from './SearchResultsTable/SearchResultsTable';
 import {StyledPosition} from '../../Styled/StyledPosition';
 import PageNumbers from './PageNumbers/PageNumbers';
+import {getMovieResultsReselect, getPersonResultsReselect, getTvResultsReselect} from '../../Selectors/Selectors';
+import {SetCurrentResultsAC} from '../../redux/reducers/searchPageReducer';
 
 
 type Props = {
     data: GeneralQueryResultData[]
     queryString: string
-    setQueries: (query: string,page:number) => any
+    setQueries: (query: string, page: number) => any
     labelsWithCount: Array<{ label: string, count: number }>
-    setCurrentPage: (results: GeneralQueryResultData[]) => {}
+    setCurrentPage: (currentResults:GeneralQueryResultData[]|null ) => {}
     movies: GeneralQueryResultData[]
     tvs: GeneralQueryResultData[]
     people: GeneralQueryResultData[]
     pagesCount: {
-        movies:number,
-        tvs:number,
-        people:number
+        movies: number,
+        tvs: number,
+        people: number
     }
-    currentPageNumber:number | null
-    setCurrentPageNumber:(page:number)=>void
+    currentPageNumber: number | null
+    setCurrentPageNumber: (page: number) => void
+    setCurrentType: (type: null | 'tv' | 'movie' | 'person') => void
+    setQueryString: (query:string)=>{}
+    currentType: null | 'tv' | 'movie' | 'person'
 }
 
 type StyledSearchDiv = {
@@ -52,7 +57,23 @@ const StyledSearchContainer = styled.div`
 
 const SearchPage: FC<Props> = (props) => {
 
-    const [currentPagesCount,setCurrentPagesCount] = useState(props.pagesCount.movies)
+    const [currentPagesCount, setCurrentPagesCount] = useState(props.pagesCount.movies)
+
+
+    useEffect(() => {
+        switch (props.currentType) {
+            case null:
+            case 'movie':
+                setCurrentPagesCount(props.pagesCount.movies)
+                break
+            case 'tv':
+                setCurrentPagesCount(props.pagesCount.tvs)
+                break
+            case 'person':
+                setCurrentPagesCount(props.pagesCount.people)
+                break
+        }
+    }, [props.pagesCount])
 
     const [visible, setVisible] = useState(false)
 
@@ -60,26 +81,35 @@ const SearchPage: FC<Props> = (props) => {
 
     const callbacks = [
         () => {
-            props.setCurrentPage(props.movies)
+            props.setCurrentPageNumber(1)
+            props.setCurrentType('movie')
             setCurrentPagesCount(props.pagesCount.movies)
+
         },
         () => {
-            props.setCurrentPage(props.tvs)
+            props.setCurrentPageNumber(1)
+            props.setCurrentType('tv')
             setCurrentPagesCount(props.pagesCount.tvs)
+
+
         },
         () => {
-            props.setCurrentPage(props.people)
+            props.setCurrentPageNumber(1)
+            props.setCurrentType('person')
             setCurrentPagesCount(props.pagesCount.people)
+
         }
     ]
 
 
     let timeout: any
+
     useEffect(() => {
+
         return () => {
             if (timeout) clearTimeout(timeout)
         }
-    })
+    }, [props.currentPageNumber])
 
     return (
         <StyledPosition position={'relative'}>
@@ -106,7 +136,8 @@ const SearchPage: FC<Props> = (props) => {
                     onChange={(e) => {
                         let pageNumber = props.currentPageNumber ? props.currentPageNumber : 1
                         setInputValue(e.target.value)
-                        props.setQueries(e.target.value,pageNumber)
+                        props.setQueries(e.target.value, pageNumber)
+                        props.setQueryString(e.target.value)
                     }}
                     color={'rgb(195,195,195)'}
                 />
@@ -127,7 +158,7 @@ const SearchPage: FC<Props> = (props) => {
                 currentPage={props.currentPageNumber}
                 totalPages={currentPagesCount}
                 numbersToShow={7}
-                callback={(pageNumber)=>{
+                callback={(pageNumber) => {
                     props.setQueries(
                         inputValue,
                         pageNumber
