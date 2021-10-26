@@ -1,10 +1,10 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC} from 'react';
 import styles from './FilterBar.module.css';
-import DropdownFilterArea from "./DropdownFilterArea/DropdownFilterArea";
+import DropdownFilterArea from './DropdownFilterArea/DropdownFilterArea';
 import DropdownFilter from './DropdownFilterArea/DropdownFilter/DropdownFilter';
 import {sortingType} from '../../redux/reducers/SortedMoviesPageReducer';
-import {Genre, mediaType} from "../../Types/Types";
-import FilterByGenre from "./FilterByGenre/FilterByGenre";
+import {Genre, mediaType} from '../../Types/Types';
+import FilterByGenre from './FilterByGenre/FilterByGenre';
 
 type FilterBarProps = {
     initialFilter: sortingType | null
@@ -13,7 +13,7 @@ type FilterBarProps = {
     setPage: () => any
     tvGenres: Genre[]
     movieGenres: Genre[]
-    applyFilters:(genresID:number[])=>any
+    applyFilters: (genresID: number[]) => any
 }
 
 const FilterBar: FC<FilterBarProps> =

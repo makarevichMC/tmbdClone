@@ -24,7 +24,7 @@ const App:FC<appProps> = ({setConfig}) => {
                 <div className={'app-wrapper'}>
                     <Route  path={'/login'} component={LoginFormContainer}/>
                     <Route exact path={'/u/:userName?'} component={Profile}/>
-                    <Route exact path={'/main'} component={MainPageContainer}/>
+                    <Route exact path={'/'} component={MainPageContainer}/>
                     <Route exact path={'/person/:id'} component={PersonPageContainer}/>
                     <Route exact path={'/movies'} component={() => <div> movies </div>}/>
                     <Route exact path={'/movies/option/:option'} component={SortedMoviesPageContainer}/>

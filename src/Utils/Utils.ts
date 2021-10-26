@@ -24,7 +24,7 @@ export const deepEqual = (x:any,y:any) => {
 
     if (typeof x !== 'object' || typeof y !== 'object' || x===null||y ===null) return false
 
-    if (Object.keys(x).length != Object.keys(y).length) return false
+    if (Object.keys(x).length !== Object.keys(y).length) return false
 
     for (let prop in x){
         if (x[prop]===y[prop]) continue
@@ -199,8 +199,8 @@ export const convertTVDetailsType = (tv:TVDetails):TVandMovieDetails=>{
     let runtime;
     let rating = tv?.vote_average || 0;
     if (tv.episode_run_time.length>0) {
-        runtime = Math.ceil(tv.episode_run_time.
-        reduce((el1,el2)=>el1+el2,0)/tv.episode_run_time.length)
+        runtime = Math.ceil(tv.episode_run_time
+            .reduce((el1,el2)=>el1+el2,0)/tv.episode_run_time.length)
 
         let hours: number | null = Math.floor( runtime / 60);
         let minutes = runtime - hours * 60;

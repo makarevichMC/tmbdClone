@@ -1,9 +1,10 @@
-import axios, {AxiosResponse, CancelTokenSource} from 'axios';
+import axios, {CancelTokenSource} from 'axios';
 import {
     ActorsAndCrew,
     Config,
     dates,
-    Genre, GenreResponse,
+    Genre,
+    GenreResponse,
     GetMovieList,
     getMovies,
     getTV,
@@ -55,8 +56,6 @@ export const configAPI = {
         return response.data.genres
     }
 }
-
-
 
 
 //AUTHORIZATION API
@@ -303,7 +302,7 @@ export const sortedPageAPI = {
                         result = await tvSortAPI.getOnTheAir(page)
                         break
                 }
-               let tvResponse = {
+                let tvResponse = {
                     results: result?.results,
                     totalPages: result?.total_pages,
                     totalResults: result?.total_results,
@@ -319,13 +318,12 @@ export const sortedPageAPI = {
 
 
         let dateToday = new Date();
-        let dateTodayString = dateToday.toJSON().slice(0,10);
+        let dateTodayString = dateToday.toJSON().slice(0, 10);
         let todayPlusWeek = dateToday.setDate(dateToday.getDate() + 7);
-        let todayPlusWeekString = new Date(todayPlusWeek).toJSON().slice(0,10);
+        let todayPlusWeekString = new Date(todayPlusWeek).toJSON().slice(0, 10);
 
         let sortBy =
             additionalSorting ? `&sort_by=${additionalSorting}` : ``
-
 
 
         const media = MediaType.toLowerCase()
@@ -338,7 +336,7 @@ export const sortedPageAPI = {
 
         if (
             (pageSortType === `now-playing` || pageSortType === `upcoming`)
-            && dateRange){
+            && dateRange) {
             nowPlaying = `&release_date.gte=${dateRange?.minimum}&release_date.lte=${dateRange?.maximum}`
         } else {
             nowPlaying = ``
@@ -348,10 +346,9 @@ export const sortedPageAPI = {
         let onTheAir;
         if (pageSortType === `on-the-air`) {
             onTheAir = `&air_date.gte=${dateTodayString}&air_date.lte=${todayPlusWeekString}`
-        } else if (pageSortType === `airing-today`){
+        } else if (pageSortType === `airing-today`) {
             onTheAir = `&air_date.gte=${dateTodayString}&air_date.lte=${dateTodayString}`
-        }
-        else {
+        } else {
             onTheAir = ``
         }
 
@@ -378,66 +375,63 @@ export const sortedPageAPI = {
 
 
 export type movieQueryResult = {
-    title?:string
-    original_title:string
-    media_type:'movie'
-    id:number
-    poster_path : string | null
-    overview:string
-    release_date:string
+    title?: string
+    original_title: string
+    media_type: 'movie'
+    id: number
+    poster_path: string | null
+    overview: string
+    release_date: string
 }
 export type tvQueryResult = {
-    original_name:string
-    name?:string
-    media_type:'tv'
-    id:number
-    poster_path : string | null
-    overview:string
-    first_air_date:string
+    original_name: string
+    name?: string
+    media_type: 'tv'
+    id: number
+    poster_path: string | null
+    overview: string
+    first_air_date: string
 }
 export type personQueryResult = {
-    name:string
-    media_type:'person'
-    id:number
-    profile_path : string | null
+    name: string
+    media_type: 'person'
+    id: number
+    profile_path: string | null
     known_for_department: string
 }
 
 export type queryResult = movieQueryResult | tvQueryResult | personQueryResult
 
 
-
 type queryResponse<T> = {
     page: number
-    results:T[]
-    total_results:number
-    total_pages:number
+    results: T[]
+    total_results: number
+    total_pages: number
 }
 
 
-
-
-type Conditional<T> = T extends 'movie' ?  queryResponse<movieQueryResult> : (T extends 'tv' ? queryResponse<tvQueryResult>:queryResponse<personQueryResult>)
+type Conditional<T> = T extends 'movie' ? queryResponse<movieQueryResult> : (T extends 'tv' ? queryResponse<tvQueryResult> : queryResponse<personQueryResult>)
 
 export const searchPageAPI = {
-    tokens:{
+    tokens: {
         searchDataToken: null as CancelTokenSource | null
     },
 
-    async getSearchData<T>(queryString:string,page:number,type:T):Promise<Conditional<T>>{
+    async getSearchData<T>(queryString: string, page: number, type: T): Promise<Conditional<T>> {
 
         if (this.tokens.searchDataToken) {
-                this.tokens.searchDataToken.cancel('getSearchData request canceled')
-            }
+            this.tokens.searchDataToken.cancel('getSearchData request canceled')
+        }
 
-            this.tokens.searchDataToken  = axios.CancelToken.source()
+        this.tokens.searchDataToken = axios.CancelToken.source()
 
-            const response = await axiosInstance.get<Conditional<typeof type>>
+        const response = await axiosInstance.get<Conditional<typeof type>>
 
-            (`search/${type}?api_key=${APIkey}&query=${queryString}&language=ru-RU&page=${page}&include_adult=false`,
-                {cancelToken:this.tokens.searchDataToken.token})
+        (`search/${type}?api_key=${APIkey}&query=${queryString}&language=ru-RU&page=${page}&include_adult=false`,
+            {cancelToken: this.tokens.searchDataToken.token})
 
-            return response.data
+        return response.data
     },
 
 }

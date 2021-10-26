@@ -22,6 +22,7 @@ const SwitchBar: FC<SwitchBarProps> = ({labels,changeMovieData}) => {
                 children.filter(el => el.classList.contains(styles.slider))[0] as unknown as HTMLElement;
             slider.style.width = `${width+2}px`;
             slider.style.left = `-1px`;
+            console.log(slider.style.width)
         }
 
     },[]);

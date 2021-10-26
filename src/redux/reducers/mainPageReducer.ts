@@ -1,7 +1,8 @@
 import {
     Action,
     mainPageReducerActions,
-    mainPageState, MovieDetails,
+    mainPageState,
+    MovieDetails,
     MovieListObject,
     setDayTrendingMoviesAction,
     setDayTrendingTVAction,
@@ -9,12 +10,13 @@ import {
     setPopularTVAction,
     setTrailersAction,
     setWeekTrendingMoviesAction,
-    setWeekTrendingTVAction, TVDetails,
+    setWeekTrendingTVAction,
+    TVDetails,
     TVListObject,
     videoListResultObject
-} from "../../Types/Types";
-import {Dispatch} from "redux";
-import {mainPageAPI, movieInfoAPI, tvInfoAPI} from "../../API/api";
+} from '../../Types/Types';
+import {Dispatch} from 'redux';
+import {mainPageAPI, movieInfoAPI} from '../../API/api';
 
 
 const initialState: mainPageState = {
@@ -30,7 +32,7 @@ const initialState: mainPageState = {
         movies: [],
         tv: []
     },
-    trailerBar:[]
+    trailerBar: []
 }
 
 
@@ -40,11 +42,11 @@ const setPopularMoviesAC = (movies: MovieListObject[]): setPopularMoviesAction =
 });
 
 
-const setDayTrendingMoviesAC = (movies: MovieListObject[]|MovieDetails[]): setDayTrendingMoviesAction => ({
+const setDayTrendingMoviesAC = (movies: MovieListObject[] | MovieDetails[]): setDayTrendingMoviesAction => ({
     type: mainPageReducerActions.FETCH_TRENDING_MOVIES_DAY,
     payload: movies
 });
-const setWeekTrendingMoviesAC = (movies: MovieListObject[]|MovieDetails[]): setWeekTrendingMoviesAction => ({
+const setWeekTrendingMoviesAC = (movies: MovieListObject[] | MovieDetails[]): setWeekTrendingMoviesAction => ({
     type: mainPageReducerActions.FETCH_TRENDING_MOVIES_WEEK,
     payload: movies
 });
@@ -54,17 +56,17 @@ const setPopularTVAC = (movies: TVListObject[]): setPopularTVAction => ({
     payload: movies
 });
 
-const setDayTrendingTVAC = (movies: TVListObject[]|TVDetails[]): setDayTrendingTVAction => ({
+const setDayTrendingTVAC = (movies: TVListObject[] | TVDetails[]): setDayTrendingTVAction => ({
     type: mainPageReducerActions.FETCH_TRENDING_TV_DAY,
     payload: movies
 });
-const setWeekTrendingTVAC = (movies: TVListObject[]|TVDetails[]): setWeekTrendingTVAction => ({
+const setWeekTrendingTVAC = (movies: TVListObject[] | TVDetails[]): setWeekTrendingTVAction => ({
     type: mainPageReducerActions.FETCH_TRENDING_TV_WEEK,
     payload: movies
 });
 
-const setTrailerBar = (trailers:videoListResultObject[]):setTrailersAction => ({
-    type:mainPageReducerActions.FETCH_TRAILERS,
+const setTrailerBar = (trailers: videoListResultObject[]): setTrailersAction => ({
+    type: mainPageReducerActions.FETCH_TRAILERS,
     payload: trailers
 });
 
@@ -95,8 +97,8 @@ export const mainPageReducer = (state = initialState, action: MainPageAction): m
         case mainPageReducerActions.FETCH_TRENDING_TV_WEEK: {
             return {...state, trendingBarWeek: {...state.trendingBarWeek, tv: action.payload}}
         }
-        case mainPageReducerActions.FETCH_TRAILERS:{
-            return {...state,trailerBar:action.payload}
+        case mainPageReducerActions.FETCH_TRAILERS: {
+            return {...state, trailerBar: action.payload}
         }
     }
     return state
@@ -118,36 +120,14 @@ export const SetMainPageThunk = () => async (dispatch: Dispatch<Action>) => {
         ]
     );
 
-    const trendingDayMoviesRU = await Promise.all(
-          results[0].results.map(movie=>{
-              return movieInfoAPI.getMovieDetails(movie.id)
-          })
-    )
-    const trendingWeekMoviesRU = await Promise.all(
-        results[1].results.map(movie=>{
-            return movieInfoAPI.getMovieDetails(movie.id)
-        })
-    )
-
-    const trendingDayTVRU = await Promise.all(
-        results[2].results.map(tv=>{
-            return tvInfoAPI.getTVDetails(tv.id)
-        })
-    )
-
-    const trendingWeekTVRU = await Promise.all(
-        results[3].results.map(tv=>{
-            return tvInfoAPI.getTVDetails(tv.id)
-        })
-    )
 
     const popularMovies = results[4].results.concat(results[5].results);
     const popularTV = results[6].results.concat(results[7].results);
 
-    dispatch(setDayTrendingMoviesAC(trendingDayMoviesRU));
-    dispatch(setWeekTrendingMoviesAC(trendingWeekMoviesRU));
-    dispatch(setDayTrendingTVAC(trendingDayTVRU));
-    dispatch(setWeekTrendingTVAC(trendingWeekTVRU));
+    dispatch(setDayTrendingMoviesAC(results[0].results));
+    dispatch(setWeekTrendingMoviesAC(results[1].results));
+    dispatch(setDayTrendingTVAC(results[2].results));
+    dispatch(setWeekTrendingTVAC(results[3].results));
     dispatch(setPopularMoviesAC(popularMovies));
     dispatch(setPopularTVAC(popularTV));
 
@@ -160,7 +140,7 @@ export const SetTrailersThunk = () => async (dispatch: Dispatch<Action>) => {
         return movieInfoAPI.getVideos(movie.id);
     }))
     const videosArrays = videos.filter(vid => vid.results.length === 1);
-    const videosInfo = videosArrays.map(arr=>arr.results[0]);
+    const videosInfo = videosArrays.map(arr => arr.results[0]);
 
     dispatch(setTrailerBar(videosInfo));
 }

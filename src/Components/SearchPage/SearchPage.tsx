@@ -8,8 +8,6 @@ import ResultCards from './ResultCards/ResultCards';
 import SearchResultsTable from './SearchResultsTable/SearchResultsTable';
 import {StyledPosition} from '../../Styled/StyledPosition';
 import PageNumbers from './PageNumbers/PageNumbers';
-import {getMovieResultsReselect, getPersonResultsReselect, getTvResultsReselect} from '../../Selectors/Selectors';
-import {SetCurrentResultsAC} from '../../redux/reducers/searchPageReducer';
 
 
 type Props = {
@@ -17,7 +15,7 @@ type Props = {
     queryString: string
     setQueries: (query: string, page: number) => any
     labelsWithCount: Array<{ label: string, count: number }>
-    setCurrentPage: (currentResults:GeneralQueryResultData[]|null ) => {}
+    setCurrentPage: (currentResults: GeneralQueryResultData[] | null) => {}
     movies: GeneralQueryResultData[]
     tvs: GeneralQueryResultData[]
     people: GeneralQueryResultData[]
@@ -29,15 +27,15 @@ type Props = {
     currentPageNumber: number | null
     setCurrentPageNumber: (page: number) => void
     setCurrentType: (type: null | 'tv' | 'movie' | 'person') => void
-    setQueryString: (query:string)=>{}
+    setQueryString: (query: string) => {}
     currentType: null | 'tv' | 'movie' | 'person'
 }
 
-type StyledSearchDiv = {
+type StyledSearchDivType = {
     url: any
 }
 
-const StyledSearchDiv = styled.div<StyledSearchDiv>`
+const StyledSearchDiv = styled.div<StyledSearchDivType>`
 align-items: center;
   img{
     height:16px ;
@@ -73,7 +71,7 @@ const SearchPage: FC<Props> = (props) => {
                 setCurrentPagesCount(props.pagesCount.people)
                 break
         }
-    }, [props.pagesCount])
+    }, [props.pagesCount,props.currentType])
 
     const [visible, setVisible] = useState(false)
 

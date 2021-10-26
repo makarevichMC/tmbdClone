@@ -1,11 +1,11 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC} from 'react';
 import {Genre, mediaType, MovieBarData} from '../Types/Types';
 import styles from './SortedMoviesPage.module.css'
 import Button from '../Components/Common/Button/Button';
 import {filterType} from '../API/api';
-import {initialSorting, setAdditionalSortingAction, sortingType} from '../redux/reducers/SortedMoviesPageReducer';
-import Cards from "./Cards/Cards";
-import FilterBar from "./FilterBar/FilterBar";
+import {initialSorting, sortingType} from '../redux/reducers/SortedMoviesPageReducer';
+import Cards from './Cards/Cards';
+import FilterBar from './FilterBar/FilterBar';
 
 type SortedMoviesPageProps = {
     data?: MovieBarData[] | null
@@ -16,9 +16,9 @@ type SortedMoviesPageProps = {
     additionalSorting: sortingType | null
     setAdditionalSorting: (sorting: sortingType) => any
     setPage: () => any
-    tvGenres:Genre[]
-    movieGenres:Genre[]
-    applyFilters:(genresID:number[])=>any
+    tvGenres: Genre[]
+    movieGenres: Genre[]
+    applyFilters: (genresID: number[]) => any
 }
 
 const SortedMoviesPage: FC<SortedMoviesPageProps> = (props) => {
@@ -27,8 +27,8 @@ const SortedMoviesPage: FC<SortedMoviesPageProps> = (props) => {
         <div className={styles.wrapper}>
             <FilterBar setAdditionalSorting={props.setAdditionalSorting} mediaType={props.mediaType}
                        initialFilter={props.additionalSorting} setPage={props.setPage}
-                        applyFilters={props.applyFilters} tvGenres={props.tvGenres}
-                        movieGenres={props.movieGenres}
+                       applyFilters={props.applyFilters} tvGenres={props.tvGenres}
+                       movieGenres={props.movieGenres}
             />
             <Cards {...props}/>
             <div className={styles.button}>
@@ -43,4 +43,4 @@ const SortedMoviesPage: FC<SortedMoviesPageProps> = (props) => {
     );
 };
 
-export default SortedMoviesPage;
+export default React.memo(SortedMoviesPage);

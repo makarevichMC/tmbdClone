@@ -1,7 +1,7 @@
-import {Action, Actor, CrewMember, MovieBarData, MovieDetails, MovieListObject, TVDetails} from '../../Types/Types';
-import {Dispatch} from "redux";
-import {movieInfoAPI, tvInfoAPI} from "../../API/api";
-import {convertMovieDetailsType, convertTVDetailsType, deepEqual, TVandMovieDetails} from "../../Utils/Utils";
+import {Action, Actor, CrewMember, MovieBarData, MovieDetails, TVDetails} from '../../Types/Types';
+import {Dispatch} from 'redux';
+import {movieInfoAPI, tvInfoAPI} from '../../API/api';
+import {convertMovieDetailsType, convertTVDetailsType, deepEqual, TVandMovieDetails} from '../../Utils/Utils';
 
 
 export interface moviePageState {
@@ -17,7 +17,7 @@ const initialState: moviePageState = {
     actors: [],
     crew: [],
     recomendations: [],
-    mediaDetails:null
+    mediaDetails: null
 }
 
 export enum moviePageActions {
@@ -27,6 +27,7 @@ export enum moviePageActions {
     SET_RECOMENDATIONS = 'SET_RECOMENDATIONS',
     // SET_TV_DETAILS = 'SET_TV_DETAILS',
 }
+
 // export type setTVDetailsAction = {
 //     type: moviePageActions.SET_TV_DETAILS,
 //     payload: {
@@ -82,15 +83,13 @@ type moviePageAction =
     setRecomendationsAction
 
 
-
-
-export const moviePageReducer = (state=initialState,action:moviePageAction):moviePageState => {
+export const moviePageReducer = (state = initialState, action: moviePageAction): moviePageState => {
     switch (action.type) {
         case moviePageActions.SET_MOVIE_DETAILS:
-            if (deepEqual(action.payload.details,state.movieDetails)) {
+            if (deepEqual(action.payload.details, state.movieDetails)) {
                 return state
             }
-            return {...state,movieDetails:action.payload.details}
+            return {...state, movieDetails: action.payload.details}
         // case moviePageActions.SET_MOVIE_DETAILS:
         //     if (deepEqual(action.payload.details,state.mediaDetails)) {
         //         return state
@@ -102,23 +101,23 @@ export const moviePageReducer = (state=initialState,action:moviePageAction):movi
         //     }
         //     return {...state,mediaDetails:action.payload.details}
         case moviePageActions.SET_ACTORS:
-            return {...state,actors:action.payload.actors}
+            return {...state, actors: action.payload.actors}
         case moviePageActions.SET_CREW:
-            return {...state,crew:action.payload.crew}
+            return {...state, crew: action.payload.crew}
         case moviePageActions.SET_RECOMENDATIONS:
-            return {...state,recomendations:action.payload.recomendations}
+            return {...state, recomendations: action.payload.recomendations}
     }
     return state
 }
 
 
-export const setMoviePageThunk = (id:string,tv:boolean = false) => async (dispatch:Dispatch<Action>) =>  {
+export const setMoviePageThunk = (id: string, tv: boolean = false) => async (dispatch: Dispatch<Action>) => {
 
     const innerId = Number(id);
 
     let results;
 
-    if (tv){
+    if (tv) {
         results = await Promise.all([
             tvInfoAPI.getTVDetails(innerId),
             tvInfoAPI.getActorsAndCrew(innerId),
@@ -134,7 +133,6 @@ export const setMoviePageThunk = (id:string,tv:boolean = false) => async (dispat
         ]);
         dispatch(setMovieDetailsAC(convertMovieDetailsType(results[0])));
     }
-
 
 
     dispatch(setActorsAC(results[1].cast));

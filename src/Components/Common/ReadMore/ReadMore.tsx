@@ -34,7 +34,7 @@ const ReadMore: FC<ReadMoreProps> = ({text, visibleLength}) => {
                     <span className={styles.text}>
                        {visibleText}
                     </span>
-                    <a className={styles.text_toggle} onClick={clickHandler}>{buttonText}</a>
+                    <a href={'#'} className={styles.text_toggle} onClick={clickHandler}>{buttonText}</a>
                 </div>
                 :
                 <div> {text} </div>

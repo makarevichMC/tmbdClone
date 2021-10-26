@@ -21,7 +21,7 @@ const Header: FC<HeaderProps> = ({authorized, username, logout, session_id}) => 
         <header>
             <div className={styles.content}>
                 <div className={styles.logo}>
-                    <NavLink to={'/main'}>
+                    <NavLink to={'/'}>
                         <img src={logo} alt="not found"/>
                     </NavLink>
                 </div>

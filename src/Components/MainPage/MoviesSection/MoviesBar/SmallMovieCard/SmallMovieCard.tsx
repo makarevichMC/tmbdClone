@@ -38,7 +38,7 @@ const SmallMovieCard: FC<smallMovieCard> = ({imageUrl, title, date, rating, id,t
                 <MoreButton id={id}/>
             </div>
             <NavLink to={url}>
-                <img className={styles.card_img} src={imageUrl}/>
+                <img className={styles.card_img} src={imageUrl} alt={'not found'}/>
             </NavLink>
             <div onMouseEnter={highlightToggle} onMouseLeave={highlightToggle} className={titleStyle}>
                 <NavLink to={url}>

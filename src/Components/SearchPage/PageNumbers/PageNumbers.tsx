@@ -73,7 +73,7 @@ const PageNumbers:FC<Props> = ({totalPages,numbersToShow,callback,currentPage}) 
         if (currentPage + 3 > numbersToShow + 3 && currentPage < totalPages - numbersToShow){
             firstPart = [...pageButtons.slice(0,2),'...']
             middlePart = [...pageButtons.slice(currentPage-3,currentPage+3)]
-            secondPart = [,...pageButtons.slice(pageButtons.length-2,pageButtons.length)]
+            secondPart = [...pageButtons.slice(pageButtons.length-2,pageButtons.length)]
         }
 
         if (currentPage + 3 > numbersToShow + 3 && currentPage >= totalPages - numbersToShow){

@@ -1,6 +1,6 @@
 import {Action, dates, mediaType, MovieBarData} from '../../Types/Types'
 import {Dispatch} from 'redux'
-import {getSortedMediaArg, getSortedMovie, getSortedTV, sortedPageAPI} from '../../API/api'
+import {sortedPageAPI} from '../../API/api'
 import {RootState} from '../store'
 import {convertMediaType, deepEqual} from '../../Utils/Utils';
 
@@ -42,27 +42,28 @@ export enum SortedMoviesPageActions {
     CHANGE_PAGE_NUMBER = 'CHANGE_PAGE',
     FETCH_NEXT_PAGE = 'FETCH_NEXT_PAGE',
     SET_INITIAL_SORTING_TYPE = 'SET_INITIAL_SORTING_TYPE',
-    SET_DATES='SET_DATES',
+    SET_DATES = 'SET_DATES',
     SET_ADDITIONAL_SORTING = 'SET_ADDITIONAL_SORTING',
     SET_GENGRE_SORTING = 'SET_GENGRE_SORTING'
 }
+
 export type setGenreSortingAction = {
-    type:SortedMoviesPageActions.SET_GENGRE_SORTING,
-    payload:{
-        genresID:number[]|null
+    type: SortedMoviesPageActions.SET_GENGRE_SORTING,
+    payload: {
+        genresID: number[] | null
     }
 }
 
 export type setAdditionalSortingAction = {
-    type:SortedMoviesPageActions.SET_ADDITIONAL_SORTING,
-    payload:{
-        additionalSorting:sortingType | null
+    type: SortedMoviesPageActions.SET_ADDITIONAL_SORTING,
+    payload: {
+        additionalSorting: sortingType | null
     }
 }
 export type setDatesAction = {
-    type:SortedMoviesPageActions.SET_DATES
-    payload:{
-        dates:dates | null
+    type: SortedMoviesPageActions.SET_DATES
+    payload: {
+        dates: dates | null
     }
 }
 export type fetchNextPageAction = {
@@ -90,23 +91,23 @@ export type setInitialSortingTypeAction = {
         initialSorting: initialSorting | null
     }
 }
-export const setGenreSortingAC = (genresID:number[]|null):setGenreSortingAction => ({
-    type:SortedMoviesPageActions.SET_GENGRE_SORTING,
-    payload:{
+export const setGenreSortingAC = (genresID: number[] | null): setGenreSortingAction => ({
+    type: SortedMoviesPageActions.SET_GENGRE_SORTING,
+    payload: {
         genresID
     }
 })
 
-export const setAdditionalSortingAC = (additionalSorting:sortingType):setAdditionalSortingAction => ({
-    type:SortedMoviesPageActions.SET_ADDITIONAL_SORTING,
-    payload:{
+export const setAdditionalSortingAC = (additionalSorting: sortingType): setAdditionalSortingAction => ({
+    type: SortedMoviesPageActions.SET_ADDITIONAL_SORTING,
+    payload: {
         additionalSorting
     }
 })
 
-const setDatesAC = (dates:dates|null):setDatesAction=>({
-    type:SortedMoviesPageActions.SET_DATES,
-    payload:{
+const setDatesAC = (dates: dates | null): setDatesAction => ({
+    type: SortedMoviesPageActions.SET_DATES,
+    payload: {
         dates
     }
 })
@@ -155,24 +156,24 @@ const initialState: sortedMoviesPageState = {
 
 type sortedMoviesPageAction =
     setSortedMoviesPageAction | setInitialSortingTypeAction |
-    setPageNumberAction | fetchNextPageAction |setDatesAction
-    |setAdditionalSortingAction |setGenreSortingAction
+    setPageNumberAction | fetchNextPageAction | setDatesAction
+    | setAdditionalSortingAction | setGenreSortingAction
 
 export const sortedMoviesPageReducer = (state = initialState, action: sortedMoviesPageAction): sortedMoviesPageState => {
     switch (action.type) {
         case SortedMoviesPageActions.SET_ADDITIONAL_SORTING:
             return {
-                ...state,additionalSorting:action.payload.additionalSorting
+                ...state, additionalSorting: action.payload.additionalSorting
             }
         case SortedMoviesPageActions.SET_DATES:
             return {
-                ...state,dateRange:action.payload.dates
+                ...state, dateRange: action.payload.dates
             }
         case SortedMoviesPageActions.SET_PAGE:
             if (!deepEqual(state.pageDataResponse, action.payload.data)) {
                 return {
                     ...state,
-                    pageDataResponse:{...action.payload.data}
+                    pageDataResponse: {...action.payload.data}
                 }
             }
             break
@@ -189,17 +190,16 @@ export const sortedMoviesPageReducer = (state = initialState, action: sortedMovi
                 }
             }
         case SortedMoviesPageActions.SET_GENGRE_SORTING:
-            return {...state,genreSorting:action.payload.genresID}
+            return {...state, genreSorting: action.payload.genresID}
     }
     return state
 
 }
 
 
+export const setSortedMoviesThunk = (type: mediaType, dataType: initialSorting = 'popular') => async (dispatch: Dispatch<Action>, getState: () => RootState) => {
 
-export const setSortedMoviesThunk = (type: mediaType, dataType: initialSorting = 'popular') => async (dispatch: Dispatch<Action>,getState: () => RootState) => {
-
-    const result = await sortedPageAPI.getSortedMedia(convertMediaType(type,dataType),1)
+    const result = await sortedPageAPI.getSortedMedia(convertMediaType(type, dataType), 1)
     dispatch(setInitialSortingTypeAC(dataType))
     dispatch(setDatesAC(result.dates)) // settingDates
 
@@ -207,7 +207,7 @@ export const setSortedMoviesThunk = (type: mediaType, dataType: initialSorting =
     const additionalSorting = state.additionalSorting
     const genreSorting = state.genreSorting
     const dateRange = state.dateRange
-    const trueResult = await sortedPageAPI.getMoviesSortedBy(type, dataType,1, genreSorting, additionalSorting, dateRange)
+    const trueResult = await sortedPageAPI.getMoviesSortedBy(type, dataType, 1, genreSorting, additionalSorting, dateRange)
     dispatch(setPageNumberAC(1))
     dispatch(setSortedMoviesPageAC(trueResult))
 }
