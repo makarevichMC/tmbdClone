@@ -14,18 +14,21 @@ const SwitchBar: FC<SwitchBarProps> = ({labels,changeMovieData}) => {
 
     useEffect(()=>{
         if (ref.current) {
+
             const firstLabel = ref.current.firstElementChild;
             firstLabel!.classList.add(styles.active);
             const width = firstLabel!.clientWidth;
             const children = Array.from(ref.current.children);
+            const height = ref.current.clientHeight;
             const slider =
                 children.filter(el => el.classList.contains(styles.slider))[0] as unknown as HTMLElement;
-            slider.style.width = `${width+2}px`;
-            slider.style.left = `-1px`;
-            console.log(slider.style.width)
+            slider.style.width = `${width}px`;
+            slider.style.height = `${height}px`
+            slider.style.left = '-1px';
         }
 
     },[]);
+
 
     const clickHandler = (e: React.MouseEvent) => {
         const target = e.currentTarget as unknown as HTMLElement;

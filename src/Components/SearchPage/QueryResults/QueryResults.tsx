@@ -4,18 +4,23 @@ import {StyledPosition} from '../../../Styled/StyledPosition';
 
 
 type Props = {
-    data:GeneralQueryResultData[]
+    data: GeneralQueryResultData[]
 }
 
-const QueryResults:FC<Props> = ({data}) => {
+const QueryResults: FC<Props> = ({data}) => {
 
 
     return (
-        <StyledPosition position={'absolute'} width={'100%'}>
-                {data.map((el,i)=>{
+
+        data.length !== 0 ?
+
+            <StyledPosition position={'absolute'} width={'100%'}>
+                {data.map((el, i) => {
                     return <QueryResultBar key={el.id} data={el} first={i === 0}/>
                 })}
-        </StyledPosition>
+            </StyledPosition>
+            :
+            <div>По вашему запросу ничего не найдено</div>
     );
 };
 

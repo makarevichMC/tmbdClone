@@ -242,12 +242,16 @@ export const setQueryResultsThunk = (query: string | null, page: number) => asyn
 
     const type = getState().searchPage.currentType
 
-    const movies = await searchPageAPI.getSearchData<'movie'>(query, page, 'movie')
+    let movies, tvs, people
 
-    const tvs = await searchPageAPI.getSearchData<'tv'>(query, page, 'tv')
-
-    const people = await searchPageAPI.getSearchData<'person'>(query, page, 'person')
-
+    try {
+        movies = await searchPageAPI.getSearchData<'movie'>(query, page, 'movie')
+        tvs = await searchPageAPI.getSearchData<'tv'>(query, page, 'tv')
+        people = await searchPageAPI.getSearchData<'person'>(query, page, 'person')
+    } catch (e) {
+        console.log('request canceled')
+        return
+    }
 
     dispatch(SetMovieQueryResponseAC(movies.results))
 
@@ -274,22 +278,31 @@ export const setQueryResultsThunk = (query: string | null, page: number) => asyn
     }
 
 
+    let moviePages = 0, movieResults = 0,
+        tvPages = 0, tvResults = 0,
+        peoplePages = 0, peopleResults = 0
+
     if (movies.results.length !== 0) {
-
-        dispatch(SetCurrentPageNumberAC(page))
-
-        dispatch(SetResultsCountAC(
-            movies.total_results,
-            tvs.total_results,
-            people.total_results
-        ))
-
-        dispatch(SetPagesCountAC(
-            movies.total_pages,
-            tvs.total_pages,
-            people.total_pages
-        ))
+        moviePages = movies.total_pages
+        movieResults = movies.total_results
+        tvPages = tvs.total_pages
+        tvResults = tvs.total_results
+        peoplePages = people.total_pages
+        peopleResults = people.total_results
     }
 
+    dispatch(SetCurrentPageNumberAC(page))
+
+    dispatch(SetResultsCountAC(
+        movies.total_results,
+        tvs.total_results,
+        people.total_results
+    ))
+
+    dispatch(SetPagesCountAC(
+        movies.total_pages,
+        tvs.total_pages,
+        people.total_pages
+    ))
 
 }

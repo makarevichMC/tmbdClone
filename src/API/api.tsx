@@ -400,10 +400,10 @@ export type personQueryResult = {
     known_for_department: string
 }
 
-export type queryResult = movieQueryResult | tvQueryResult | personQueryResult
 
 
-type queryResponse<T> = {
+
+export type queryResponse<T> = {
     page: number
     results: T[]
     total_results: number
